@@ -1,8 +1,6 @@
 package unitbv.cantinaApp.service;
 
 import java.math.BigDecimal;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Optional;
 import java.util.regex.Pattern;
 
@@ -29,6 +27,10 @@ public class UserService {
 		user.setBalance(new BigDecimal(0));
 		user.setEmail(email);
 		userRepository.save(user);
+	}
+	
+	public User getUserByEmail(String email) {
+		return userRepository.findByEmail(email).get();
 	}
 	
 	private boolean emailExists(String email) {

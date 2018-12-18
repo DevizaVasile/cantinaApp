@@ -1,5 +1,6 @@
 package unitbv.cantinaApp.repository.entity;
 
+import java.sql.Date;
 import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.List;
@@ -24,12 +25,21 @@ public class Invoice {
 	@Column(name="updated_at")
 	private Timestamp updatedAt;
 	
+	@Column(name="day")
+	private Date day;
+	
 	@OneToMany(mappedBy="invoice",  fetch = FetchType.EAGER, cascade=CascadeType.MERGE)
 	 private List<InvoiceFood> food;
 	
 	@ManyToOne( fetch = FetchType.EAGER, cascade=CascadeType.MERGE)
     @JoinColumn(name = "users_id")
     private User user;
+
+	public Invoice() {
+		super();
+		this.createdAt = new Timestamp(System.currentTimeMillis());
+		this.updatedAt = new Timestamp(System.currentTimeMillis());
+	}
 
 	public void addFood(Food food, Integer quantity) {
 		InvoiceFood invoiceFoodAssociation = new InvoiceFood();
@@ -71,6 +81,30 @@ public class Invoice {
 
 	public void setUser(User user) {
 		this.user = user;
+	}
+
+	public Timestamp getCreatedAt() {
+		return createdAt;
+	}
+
+	public void setCreatedAt(Timestamp createdAt) {
+		this.createdAt = createdAt;
+	}
+
+	public Timestamp getUpdatedAt() {
+		return updatedAt;
+	}
+
+	public void setUpdatedAt(Timestamp updatedAt) {
+		this.updatedAt = updatedAt;
+	}
+
+	public Date getDay() {
+		return day;
+	}
+
+	public void setDay(Date day) {
+		this.day = day;
 	}	
 	
 	

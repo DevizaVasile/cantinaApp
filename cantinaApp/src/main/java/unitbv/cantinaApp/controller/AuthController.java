@@ -33,6 +33,7 @@ import unitbv.cantinaApp.repository.entity.User;
 import unitbv.cantinaApp.repository.enums.RoleName;
 import unitbv.cantinaApp.security.JwtTokenProvider;
 import unitbv.cantinaApp.service.FoodService;
+import unitbv.cantinaApp.service.InvoiceService;
 
 import javax.persistence.EntityManager;
 import javax.sound.midi.Soundbank;
@@ -40,6 +41,7 @@ import javax.validation.Valid;
 
 import java.math.BigDecimal;
 import java.net.URI;
+import java.sql.Date;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Iterator;
@@ -74,6 +76,9 @@ public class AuthController {
     //TODO remove after tests 
     @Autowired
     FoodService foodService;
+    
+    @Autowired 
+    InvoiceService invoiceService;
 
     @PostMapping("/signin")
     public ResponseEntity<?> authenticateUser(@Valid @RequestBody LoginRequest loginRequest) {
@@ -104,18 +109,11 @@ public class AuthController {
                 signUpRequest.getEmail(), signUpRequest.getPassword());
 
         user.setPassword(passwordEncoder.encode(user.getPassword()));
-
-       // Optional<User> userRole = roleRepository.findByName("ROLE_USER");
-    
-    //    roles.add(roleRepository.findAll());
         user.setRoles(roleRepository.findAll());
-
         User result = userRepository.save(user);
-
         URI location = ServletUriComponentsBuilder
                 .fromCurrentContextPath().path("/api/users/{username}")
                 .buildAndExpand(result.getId()).toUri();
-
         return ResponseEntity.created(location).body(new ApiResponse(true, "User registered successfully"));
     }
     
@@ -124,38 +122,42 @@ public class AuthController {
     	
 //    	***********TEST REALM**********************
     	
-
-    	//create save food
-		Food food = new Food();
-		food.setName("Food1");
-		food.setPrice(BigDecimal.valueOf(10));
-		food.setWeight(120);
-		foodRepo.save(food);
-		
-		//get food
-		Food foodItr = foodRepo.findAll().get(0);
-		System.out.println(foodItr.getName());
-    	
-		//create save invoice
-    	Invoice invoice = new Invoice();
-    	invoiceRepo.save(invoice);
-    	
-    	//get invoice
-    	invoice = invoiceRepo.findAll().get(0);
-    	System.out.println(invoice.getId());
-    	
-    	invoice.addFood(foodItr, 4);
-    	
-    	invoiceRepo.save(invoice);
-    
-    	System.out.println("saved");
-    	
     	Iterable<User> users = userRepository.findAll();
     	Iterator<User> itr = users.iterator();
     	User u = itr.next();
-    	u.addInvoice(invoice);
-    	
-    	userRepository.save(u);
+		invoiceService.createNewInvoice(u, Date.valueOf("2018-12-20"));
+
+//    	//create save food
+//		Food food = new Food();
+//		food.setName("Food1");
+//		food.setPrice(BigDecimal.valueOf(10));
+//		food.setWeight(120);
+//		foodRepo.save(food);
+//		
+//		//get food
+//		Food foodItr = foodRepo.findAll().get(0);
+//		System.out.println(foodItr.getName());
+//    	
+//		//create save invoice
+//    	Invoice invoice = new Invoice();
+//    	invoiceRepo.save(invoice);
+//    	
+//    	//get invoice
+//    	invoice = invoiceRepo.findAll().get(0);
+//    	System.out.println(invoice.getId());
+//    	
+//    	invoice.addFood(foodItr, 4);
+//    	
+//    	invoiceRepo.save(invoice);
+//    
+//    	System.out.println("saved");
+//    	
+//    	Iterable<User> users = userRepository.findAll();
+//    	Iterator<User> itr = users.iterator();
+//    	User u = itr.next();
+//    	u.addInvoice(invoice);
+//    	
+//    	userRepository.save(u);
     	
     	
 //    	***********TEST REALM**********************

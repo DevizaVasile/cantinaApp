@@ -44,7 +44,7 @@ public class UserPrincipal implements UserDetails {
         List<GrantedAuthority> authorities = user.getRoles().stream().map(role ->
                 new SimpleGrantedAuthority(role.getName())
         ).collect(Collectors.toList());
-
+       
         return new UserPrincipal(
                 user.getId(),
                 user.getFirstName(),
