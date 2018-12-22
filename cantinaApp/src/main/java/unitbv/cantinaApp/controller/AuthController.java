@@ -42,6 +42,7 @@ import javax.validation.Valid;
 import java.math.BigDecimal;
 import java.net.URI;
 import java.sql.Date;
+import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Iterator;
@@ -118,7 +119,7 @@ public class AuthController {
     }
     
     @GetMapping("/signup")
-    public void createNewUser() {
+    public void createNewUser() throws ParseException {
     	
 //    	***********TEST REALM**********************
     	
