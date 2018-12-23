@@ -2,7 +2,6 @@ package unitbv.cantinaApp.service;
 
 import java.sql.Date;
 import java.text.ParseException;
-import java.time.Instant;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
@@ -68,6 +67,17 @@ public class InvoiceService {
 			if(date.compareTo(now)<0) {
 				result.add(new InvoiceRepresentation(inv.getUser().getEmail(),inv.getDay()));
 			}
+		}
+		return result;
+	}
+	
+	public List<InvoiceRepresentation> getAllInvoices(User user) throws ParseException{
+		List<Invoice> invoices =  invoiceRepository.findAllByUser(user); 
+		List<InvoiceRepresentation> result = new ArrayList<InvoiceRepresentation>();
+		Iterator<Invoice> itr = invoices.iterator();
+		while(itr.hasNext()) {
+			Invoice inv = itr.next();
+			result.add(new InvoiceRepresentation(inv.getUser().getEmail(),inv.getDay()));	
 		}
 		return result;
 	}

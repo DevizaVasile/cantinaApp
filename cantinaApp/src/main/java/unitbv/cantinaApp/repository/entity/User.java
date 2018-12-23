@@ -1,6 +1,9 @@
 package unitbv.cantinaApp.repository.entity;
 
 import javax.persistence.*;
+
+import unitbv.cantinaApp.repository.enums.RoleName;
+
 import java.math.BigDecimal;
 import java.sql.Timestamp;
 import java.time.Instant;
@@ -35,8 +38,6 @@ public class User {
 
 	private String password;
 
-	private String type;
-
 	@Column(name="updated_at")
 	private Timestamp updatedAt;
 
@@ -66,7 +67,6 @@ public class User {
 		this.password=password;
 		this.balance=BigDecimal.valueOf(0);
 		this.createdAt=Timestamp.from(Instant.now());
-		this.type="ROLE_USER";
 	}
 
 	public Long getId() {
@@ -125,14 +125,6 @@ public class User {
 		this.password = password;
 	}
 
-	public String getType() {
-		return this.type;
-	}
-
-	public void setType(String type) {
-		this.type = type;
-	}
-
 	public Timestamp getUpdatedAt() {
 		return this.updatedAt;
 	}
@@ -160,5 +152,17 @@ public class User {
 	public void addInvoice(Invoice invoice) {
 		this.invoices.add(invoice);
 		invoice.setUser(this);
+	}
+	
+	public void addRole(Role role) {
+		if(! this.roles.contains(role)) {
+			this.roles.add(role);
+		}
+	}
+	
+	public void removeRole(Role role) {
+		if(this.roles.contains(role)) {
+			this.roles.remove(role);
+		}
 	}
 }

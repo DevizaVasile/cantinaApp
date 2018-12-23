@@ -3,6 +3,7 @@ package unitbv.cantinaApp.controller;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -20,6 +21,7 @@ import unitbv.cantinaApp.payload.ApiResponse;
 import unitbv.cantinaApp.payload.JwtAuthenticationResponse;
 import unitbv.cantinaApp.payload.LoginRequest;
 import unitbv.cantinaApp.payload.SignUpRequest;
+import unitbv.cantinaApp.payload.user.ChangeRoleRequest;
 import unitbv.cantinaApp.repository.FoodRepository;
 import unitbv.cantinaApp.repository.InvoiceRepository;
 import unitbv.cantinaApp.repository.RoleRepository;
@@ -34,6 +36,7 @@ import unitbv.cantinaApp.repository.enums.RoleName;
 import unitbv.cantinaApp.security.JwtTokenProvider;
 import unitbv.cantinaApp.service.FoodService;
 import unitbv.cantinaApp.service.InvoiceService;
+import unitbv.cantinaApp.service.UserService;
 
 import javax.persistence.EntityManager;
 import javax.sound.midi.Soundbank;
@@ -58,15 +61,12 @@ public class AuthController {
 
     @Autowired
     UserRepository userRepository;
+    
+    @Autowired
+	UserService userService;
 
     @Autowired
     RoleRepository roleRepository;
-    
-    @Autowired  
-    FoodRepository foodRepo;
-    
-    @Autowired
-    InvoiceRepository invoiceRepo;
     
     @Autowired
     PasswordEncoder passwordEncoder;
@@ -74,13 +74,6 @@ public class AuthController {
     @Autowired
     JwtTokenProvider tokenProvider;
     
-    //TODO remove after tests 
-    @Autowired
-    FoodService foodService;
-    
-    @Autowired 
-    InvoiceService invoiceService;
-
     @PostMapping("/signin")
     public ResponseEntity<?> authenticateUser(@Valid @RequestBody LoginRequest loginRequest) {
 
@@ -110,7 +103,9 @@ public class AuthController {
                 signUpRequest.getEmail(), signUpRequest.getPassword());
 
         user.setPassword(passwordEncoder.encode(user.getPassword()));
-        user.setRoles(roleRepository.findAll());
+        List<Role> roleList = new ArrayList<Role>();
+        roleList.add(roleRepository.findByName("ROLE_USER").get());
+        user.setRoles(roleList);
         User result = userRepository.save(user);
         URI location = ServletUriComponentsBuilder
                 .fromCurrentContextPath().path("/api/users/{username}")
@@ -118,68 +113,29 @@ public class AuthController {
         return ResponseEntity.created(location).body(new ApiResponse(true, "User registered successfully"));
     }
     
-    @GetMapping("/signup")
-    public void createNewUser() throws ParseException {
-    	
-//    	***********TEST REALM**********************
-    	
-//    	Iterable<User> users = userRepository.findAll();
-//    	Iterator<User> itr = users.iterator();
-//    	User u = itr.next();
-//		invoiceService.createNewInvoice(u, Date.valueOf("2018-12-20"));
-
-//    	//create save food
-//		Food food = new Food();
-//		food.setName("Food1");
-//		food.setPrice(BigDecimal.valueOf(10));
-//		food.setWeight(120);
-//		foodRepo.save(food);
-//		
-//		//get food
-//		Food foodItr = foodRepo.findAll().get(0);
-//		System.out.println(foodItr.getName());
-//    	
-//		//create save invoice
-//    	Invoice invoice = new Invoice();
-//    	invoiceRepo.save(invoice);
-//    	
-//    	//get invoice
-//    	invoice = invoiceRepo.findAll().get(0);
-//    	System.out.println(invoice.getId());
-//    	
-//    	invoice.addFood(foodItr, 4);
-//    	
-//    	invoiceRepo.save(invoice);
-//    
-//    	System.out.println("saved");
-//    	
-//    	Iterable<User> users = userRepository.findAll();
-//    	Iterator<User> itr = users.iterator();
-//    	User u = itr.next();
-//    	u.addInvoice(invoice);
-//    	
-//    	userRepository.save(u);
-    	
-    	
-//    	***********TEST REALM**********************
-//    	Iterable<User> users = userRepository.findAll();
-//    	Iterator<User> itr = users.iterator();
-//    	User u = itr.next();
-//    	Role r1 = new Role();
-//    	r1.setName(RoleName.ROLE_STAFF);
-//    	r1.setId((long) 2);
-//    	u.getRoles().add(r1);
-//    	userRepository.save(u);
-//    	Optional<User> u2 = userRepository.findById( (long) 1);
-//    	System.out.println(u2.get().getRoles().toString());
-//    	Set<Role> roles = u2.get().getRoles();
-//    	Iterator<Role> rolesItr =  roles.iterator();
-//    	while(rolesItr.hasNext()) {
-//    		System.out.println(rolesItr.next().getName());
-//    	}
-//    	
-//    	foodService.createNewFood("Shawrma", 300, 10.0);
-//    	foodService.remove(1);
- 
+    @PostMapping("/addRole")
+    @PreAuthorize("hasRole('ADMIN')")
+    public ResponseEntity<?> addRole(@Valid @RequestBody ChangeRoleRequest changeRoleReuqest) throws ParseException {
+    	boolean result = userService.addRole(changeRoleReuqest.getEmail(), changeRoleReuqest.getRole());
+    	if (result==true){
+    		return new ResponseEntity<>(new ApiResponse(result, "Role "+changeRoleReuqest.getRole() +" added for user: "+changeRoleReuqest.getEmail()), HttpStatus.ACCEPTED); 
+    	}
+    	else
+    	{
+    		return new ResponseEntity<>(new ApiResponse(result, "User does not exist or already have this role"), HttpStatus.METHOD_NOT_ALLOWED); 
+    	}
+    }
+    
+    @PostMapping("/removeRole")
+    @PreAuthorize("hasRole('ADMIN')")
+    public ResponseEntity<?> removeRole(@Valid @RequestBody ChangeRoleRequest changeRoleReuqest) throws ParseException {
+    	boolean result = userService.removeRole(changeRoleReuqest.getEmail(), changeRoleReuqest.getRole());
+    	if (result==true){
+    		return new ResponseEntity<>(new ApiResponse(result, "Role "+changeRoleReuqest.getRole() +" removed for user: "+changeRoleReuqest.getEmail()), HttpStatus.ACCEPTED); 
+    	}
+    	else
+    	{
+    		return new ResponseEntity<>(new ApiResponse(result, "User does not exist or already have this role"), HttpStatus.METHOD_NOT_ALLOWED); 
+    	}
     }
 }

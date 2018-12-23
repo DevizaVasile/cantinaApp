@@ -1,9 +1,7 @@
 package unitbv.cantinaApp.controller;
 
-import java.sql.Date;
 import java.text.ParseException;
 import java.util.List;
-import java.util.Optional;
 
 import javax.validation.Valid;
 
@@ -19,7 +17,6 @@ import unitbv.cantinaApp.payload.ApiResponse;
 import unitbv.cantinaApp.payload.invoice.InvoiceRepresentation;
 import unitbv.cantinaApp.payload.invoice.InvoicesRequest;
 import unitbv.cantinaApp.payload.invoice.NewInvoiceRequest;
-import unitbv.cantinaApp.repository.entity.Invoice;
 import unitbv.cantinaApp.repository.entity.User;
 import unitbv.cantinaApp.service.InvoiceService;
 import unitbv.cantinaApp.service.UserService;
@@ -54,6 +51,12 @@ public class InvoiceController {
 	
 	@PostMapping("/getPastInvoices")
 	private List<InvoiceRepresentation> getAllPastInvoices(@RequestBody InvoicesRequest request) throws ParseException{
+		User user = userService.getUserByEmail(request.getEmail());
+		return invoiceService.getAllPastInvoices(user);
+	}
+	
+	@PostMapping("/getAllInvoices")
+	private List<InvoiceRepresentation> getAllInvoices(@RequestBody InvoicesRequest request) throws ParseException{
 		User user = userService.getUserByEmail(request.getEmail());
 		return invoiceService.getAllPastInvoices(user);
 	}

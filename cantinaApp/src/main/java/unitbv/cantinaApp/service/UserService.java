@@ -7,7 +7,9 @@ import java.util.regex.Pattern;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import unitbv.cantinaApp.repository.RoleRepository;
 import unitbv.cantinaApp.repository.UserRepository;
+import unitbv.cantinaApp.repository.entity.Role;
 import unitbv.cantinaApp.repository.entity.User;
 import unitbv.cantinaApp.repository.enums.RoleName;
 
@@ -17,11 +19,11 @@ public class UserService {
 	@Autowired
 	UserRepository userRepository;
 	
-
+	@Autowired
+	RoleRepository roleRepository;
 	
 	public void createNewClient(String firstName, String lastName, String email) {
 		User user = new User();
-		user.setType(RoleName.ROLE_USER.toString());
 		user.setFirstName(firstName);
 		user.setLastName(lastName);
 		user.setBalance(new BigDecimal(0));
@@ -65,6 +67,36 @@ public class UserService {
 		}
 		
 		return status;
+	}
+	
+	public boolean addRole(String email,String roleName) {
+		Optional<User> userOptional = userRepository.findByEmail(email);
+		Optional<Role> role = roleRepository.findByName(roleName);
+		if(userOptional.isPresent() && role.isPresent()) {
+			User user = userOptional.get();
+			user.addRole(role.get());
+			userRepository.save(user);
+			return true;
+		}
+		else
+		{
+			return false;
+		}
+	}
+	
+	public boolean removeRole(String email,String roleName) {
+		Optional<User> userOptional = userRepository.findByEmail(email);
+		Optional<Role> role = roleRepository.findByName(roleName);
+		if(userOptional.isPresent() && role.isPresent()) {
+			User user = userOptional.get();
+			user.removeRole(role.get());
+			userRepository.save(user);
+			return true;
+		}
+		else
+		{
+			return false;
+		}
 	}
 	
 	

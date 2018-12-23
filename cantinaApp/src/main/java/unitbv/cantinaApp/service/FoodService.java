@@ -1,12 +1,15 @@
 package unitbv.cantinaApp.service;
 
 import java.math.BigDecimal;
+import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import unitbv.cantinaApp.payload.food.FoodRepresentation;
 import unitbv.cantinaApp.repository.FoodRepository;
 import unitbv.cantinaApp.repository.entity.Food;
 
@@ -16,13 +19,13 @@ public class FoodService {
 	@Autowired
 	private FoodRepository foodRepository;
 	
-	public void createNewFood(String name, int weight, Double price)
+	public Food createNewFood(String name, int weight, Double price)
 	{
 		Food food = new Food();
 		food.setName(name);
 		food.setWeight(weight);
 		food.setPrice(BigDecimal.valueOf(price));
-		foodRepository.save(food);
+		return foodRepository.save(food);
 	}
 	
 	public Food findById(long id) {
@@ -88,9 +91,20 @@ public class FoodService {
 		};
 	}
 	
-	public List<Food> getAll(){
+	public List<FoodRepresentation> getAll(){
 		List<Food> allFood = foodRepository.findAll();
-		return allFood;
+		Iterator<Food> foodIterator = allFood.iterator();
+		List<FoodRepresentation> allFoodRepresentation = new ArrayList<FoodRepresentation>();
+		while(foodIterator.hasNext()) {
+			Food food = foodIterator.next();
+			FoodRepresentation foodRepresentation = new FoodRepresentation();
+			foodRepresentation.setId(food.getId());
+			foodRepresentation.setName(food.getName());
+			foodRepresentation.setPrice(food.getPrice());
+			foodRepresentation.setWeight(food.getWeight());
+			allFoodRepresentation.add(foodRepresentation);
+		}
+		return allFoodRepresentation;
 	}
 	
 	public void update(Food food) {
