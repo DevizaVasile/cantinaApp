@@ -11,7 +11,6 @@ import unitbv.cantinaApp.repository.RoleRepository;
 import unitbv.cantinaApp.repository.UserRepository;
 import unitbv.cantinaApp.repository.entity.Role;
 import unitbv.cantinaApp.repository.entity.User;
-import unitbv.cantinaApp.repository.enums.RoleName;
 
 @Service
 public class UserService {

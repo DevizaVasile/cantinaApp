@@ -9,48 +9,30 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
-import unitbv.cantinaApp.exception.AppException;
 import unitbv.cantinaApp.payload.ApiResponse;
 import unitbv.cantinaApp.payload.JwtAuthenticationResponse;
-import unitbv.cantinaApp.payload.LoginRequest;
-import unitbv.cantinaApp.payload.SignUpRequest;
 import unitbv.cantinaApp.payload.user.ChangeRoleRequest;
-import unitbv.cantinaApp.repository.FoodRepository;
-import unitbv.cantinaApp.repository.InvoiceRepository;
+import unitbv.cantinaApp.payload.user.LoginRequest;
+import unitbv.cantinaApp.payload.user.SignUpRequest;
 import unitbv.cantinaApp.repository.RoleRepository;
 import unitbv.cantinaApp.repository.UserRepository;
-import unitbv.cantinaApp.repository.entity.Food;
-import unitbv.cantinaApp.repository.entity.Invoice;
-import unitbv.cantinaApp.repository.entity.InvoiceFood;
-import unitbv.cantinaApp.repository.entity.InvoiceFoodId;
 import unitbv.cantinaApp.repository.entity.Role;
 import unitbv.cantinaApp.repository.entity.User;
-import unitbv.cantinaApp.repository.enums.RoleName;
 import unitbv.cantinaApp.security.JwtTokenProvider;
-import unitbv.cantinaApp.service.FoodService;
-import unitbv.cantinaApp.service.InvoiceService;
 import unitbv.cantinaApp.service.UserService;
 
-import javax.persistence.EntityManager;
-import javax.sound.midi.Soundbank;
 import javax.validation.Valid;
 
-import java.math.BigDecimal;
 import java.net.URI;
-import java.sql.Date;
 import java.text.ParseException;
 import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Iterator;
 import java.util.List;
-import java.util.Optional;
 
 @RestController
 @RequestMapping("/api/auth")
