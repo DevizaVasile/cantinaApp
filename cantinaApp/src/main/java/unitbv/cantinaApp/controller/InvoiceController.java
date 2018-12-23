@@ -38,7 +38,7 @@ public class InvoiceController {
 	private ResponseEntity<?> createNewInvoice(@Valid @RequestBody NewInvoiceRequest newInvoiceRequest) throws ParseException {
 		java.util.Date day = util.TimeUtils.fromStringToDate(newInvoiceRequest.getDay());
 		if(invoiceService.isValidDay(util.TimeUtils.fromUtilDateToSqlDate(day))) {
-			invoiceService.createNewInvoice(userService.getUserByEmail(newInvoiceRequest.getEmail()),Date.valueOf(newInvoiceRequest.getDay()));
+			invoiceService.createNewInvoice(userService.getUserByEmail(newInvoiceRequest.getEmail()),newInvoiceRequest.getDay());
 			return new ResponseEntity<>(new ApiResponse(true, "Invoice has been created or exists"),HttpStatus.ACCEPTED);
 		}
 		else {
@@ -46,9 +46,15 @@ public class InvoiceController {
 		}
 	}
 	
-	@PostMapping("/test")
-	private List<InvoiceRepresentation> getAll(@RequestBody InvoicesRequest request){
+	@PostMapping("/getFutureInvoices")
+	private List<InvoiceRepresentation> getAllFutureInvoices(@RequestBody InvoicesRequest request) throws ParseException{
 		User user = userService.getUserByEmail(request.getEmail());
 		return invoiceService.getAllFutureInvoices(user);
+	}
+	
+	@PostMapping("/getPastInvoices")
+	private List<InvoiceRepresentation> getAllPastInvoices(@RequestBody InvoicesRequest request) throws ParseException{
+		User user = userService.getUserByEmail(request.getEmail());
+		return invoiceService.getAllPastInvoices(user);
 	}
 }

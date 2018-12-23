@@ -123,10 +123,10 @@ public class AuthController {
     	
 //    	***********TEST REALM**********************
     	
-    	Iterable<User> users = userRepository.findAll();
-    	Iterator<User> itr = users.iterator();
-    	User u = itr.next();
-		invoiceService.createNewInvoice(u, Date.valueOf("2018-12-20"));
+//    	Iterable<User> users = userRepository.findAll();
+//    	Iterator<User> itr = users.iterator();
+//    	User u = itr.next();
+//		invoiceService.createNewInvoice(u, Date.valueOf("2018-12-20"));
 
 //    	//create save food
 //		Food food = new Food();

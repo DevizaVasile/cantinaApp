@@ -27,11 +27,11 @@ public class InvoiceService {
 	@Autowired
 	InvoiceRepository invoiceRepository;
 	
-	public Invoice createNewInvoice(User user,Date day) throws ParseException {
+	public Invoice createNewInvoice(User user,String day) throws ParseException {
 		if(!hasInvoiceForDay(user,day) ) {
 			Invoice invoice = new Invoice();
 			invoice.setUser(user);
-			invoice.setDay(day);
+			invoice.setDay(day.toString());
 			invoice = invoiceRepository.save(invoice);
 			user.addInvoice(invoice);
 			userRepository.save(user);
@@ -42,14 +42,32 @@ public class InvoiceService {
 		}
 	}
 	
-	public List<InvoiceRepresentation> getAllFutureInvoices(User user){
-		java.util.Date date = java.util.Date.from(Instant.now());
-		List<Invoice> invoices =  invoiceRepository.findByUserAndDayGreaterThan(user, util.TimeUtils.fromUtilDateToSqlDate(date)); 
+	public List<InvoiceRepresentation> getAllFutureInvoices(User user) throws ParseException{
+		List<Invoice> invoices =  invoiceRepository.findAllByUser(user); 
 		List<InvoiceRepresentation> result = new ArrayList<InvoiceRepresentation>();
 		Iterator<Invoice> itr = invoices.iterator();
+		java.util.Date now = util.TimeUtils.fromInstantToDate();
 		while(itr.hasNext()) {
 			Invoice inv = itr.next();
-			result.add(new InvoiceRepresentation(inv.getUser().getEmail(),inv.getDay().toString()));
+			java.util.Date date = util.TimeUtils.fromStringToDate(inv.getDay());
+			if(date.compareTo(now)>=0) {
+				result.add(new InvoiceRepresentation(inv.getUser().getEmail(),inv.getDay()));
+			}
+		}
+		return result;
+	}
+	
+	public List<InvoiceRepresentation> getAllPastInvoices(User user) throws ParseException{
+		List<Invoice> invoices =  invoiceRepository.findAllByUser(user); 
+		List<InvoiceRepresentation> result = new ArrayList<InvoiceRepresentation>();
+		Iterator<Invoice> itr = invoices.iterator();
+		java.util.Date now = util.TimeUtils.fromInstantToDate();
+		while(itr.hasNext()) {
+			Invoice inv = itr.next();
+			java.util.Date date = util.TimeUtils.fromStringToDate(inv.getDay());
+			if(date.compareTo(now)<0) {
+				result.add(new InvoiceRepresentation(inv.getUser().getEmail(),inv.getDay()));
+			}
 		}
 		return result;
 	}
@@ -57,7 +75,7 @@ public class InvoiceService {
 	
 	
 	 
-	private boolean hasInvoiceForDay(User user,Date day) {
+	private boolean hasInvoiceForDay(User user,String day) {
 		return invoiceRepository.findByUserAndDay(user, day).isPresent();
 	}
 	

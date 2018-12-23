@@ -26,7 +26,7 @@ public class Invoice {
 	private Timestamp updatedAt;
 	
 	@Column(name="day")
-	private Date day;
+	private String day;
 	
 	@OneToMany(mappedBy="invoice",  fetch = FetchType.EAGER, cascade=CascadeType.MERGE)
 	 private List<InvoiceFood> food;
@@ -99,11 +99,11 @@ public class Invoice {
 		this.updatedAt = updatedAt;
 	}
 
-	public Date getDay() {
+	public String getDay() {
 		return day;
 	}
 
-	public void setDay(Date day) {
+	public void setDay(String day) {
 		this.day = day;
 	}	
 	
