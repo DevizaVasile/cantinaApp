@@ -2,8 +2,6 @@ package unitbv.cantinaApp.repository.entity;
 
 import javax.persistence.*;
 
-import unitbv.cantinaApp.repository.enums.RoleName;
-
 import java.math.BigDecimal;
 import java.sql.Timestamp;
 import java.time.Instant;

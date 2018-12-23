@@ -19,12 +19,13 @@ public class FoodService {
 	@Autowired
 	private FoodRepository foodRepository;
 	
-	public Food createNewFood(String name, int weight, Double price)
+	public Food createNewFood(String name, int weight, Double price, boolean active)
 	{
 		Food food = new Food();
 		food.setName(name);
 		food.setWeight(weight);
 		food.setPrice(BigDecimal.valueOf(price));
+		food.setActive(active);
 		return foodRepository.save(food);
 	}
 	

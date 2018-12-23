@@ -38,7 +38,7 @@ public class FoodController {
     public ResponseEntity<?> createNew(@Valid @RequestBody NewFoodRequest newFoodRequest){
     	Food food =  foodService.findByName(newFoodRequest.getName());
     	if(food == null) {
-    		foodService.createNewFood(newFoodRequest.getName(), newFoodRequest.getWeigth(), newFoodRequest.getPrice());
+    		foodService.createNewFood(newFoodRequest.getName(), newFoodRequest.getWeigth(), newFoodRequest.getPrice(), newFoodRequest.getActive());
     		return new ResponseEntity<>(new ApiResponse(true, "New food has been added"),HttpStatus.CREATED);
     	}
     	else

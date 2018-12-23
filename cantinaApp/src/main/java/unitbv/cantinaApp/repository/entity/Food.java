@@ -27,6 +27,9 @@ public class Food {
 	@Column
 	private int weight;
 	
+	@Column
+	private boolean active;
+	
 	@OneToMany(mappedBy="food", fetch = FetchType.EAGER, cascade=CascadeType.MERGE)
 	 private List<InvoiceFood> invoiceFood;
 
@@ -68,7 +71,15 @@ public class Food {
 	public Long getId() {
 		return id;
 	}
-	
-	
 
+	public boolean getActive() {
+		return active;
+	}
+
+	public void setActive(boolean active) {
+		this.active = active;
+	}
+
+	
+	
 }
