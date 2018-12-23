@@ -108,8 +108,19 @@ public class FoodService {
 		return allFoodRepresentation;
 	}
 	
-	public void update(Food food) {
+	public boolean update(FoodRepresentation foodRepresentation) {
+		try {
+    	Food food = findById(foodRepresentation.getId());
+    	food.setName(foodRepresentation.getName());
+    	food.setActive(foodRepresentation.isVisible());
+    	food.setPrice(foodRepresentation.getPrice());
+    	food.setWeight(foodRepresentation.getWeight());
 		foodRepository.save(food);
+		return true;
+		}
+		catch(Exception e) {
+			return false;
+		}
 		
 	}
 	

@@ -7,6 +7,7 @@ public class FoodRepresentation {
 	private BigDecimal price;
 	private Integer weight;
 	private Long id;
+	private boolean visible;
 	
 	public FoodRepresentation() {
 		super();
@@ -43,4 +44,14 @@ public class FoodRepresentation {
 	public void setId(Long id) {
 		this.id = id;
 	}
+
+	public boolean isVisible() {
+		return visible;
+	}
+
+	public void setVisible(boolean visible) {
+		this.visible = visible;
+	}
+	
+	
 }
