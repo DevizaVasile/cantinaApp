@@ -72,5 +72,44 @@ public class InvoiceFood {
 		this.food = food;
 	}
 	
-	 
+	public void addQuantity(Integer quantity) {
+		this.quantity+=quantity;
+	}
+	
+	public void substractQuantity(Integer quantity) {
+		this.quantity-=quantity;
+	}
+
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + (int) (foodId ^ (foodId >>> 32));
+		result = prime * result + (int) (invoiceId ^ (invoiceId >>> 32));
+		result = prime * result + ((quantity == null) ? 0 : quantity.hashCode());
+		return result;
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		InvoiceFood other = (InvoiceFood) obj;
+		if (foodId != other.foodId)
+			return false;
+		if (invoiceId != other.invoiceId)
+			return false;
+		if (quantity == null) {
+			if (other.quantity != null)
+				return false;
+		} else if (!quantity.equals(other.quantity))
+			return false;
+		return true;
+	}
+	
+	
 }

@@ -2,6 +2,7 @@ package unitbv.cantinaApp.repository.entity;
 
 import java.sql.Timestamp;
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 
 import javax.persistence.*;
@@ -28,7 +29,7 @@ public class Invoice {
 	private String day;
 	
 	@OneToMany(mappedBy="invoice",  fetch = FetchType.EAGER, cascade=CascadeType.MERGE)
-	 private List<InvoiceFood> food;
+	private List<InvoiceFood> invoiceFood;
 	
 	@ManyToOne( fetch = FetchType.EAGER, cascade=CascadeType.MERGE)
     @JoinColumn(name = "users_id")
@@ -41,25 +42,31 @@ public class Invoice {
 	}
 
 	public void addFood(Food food, Integer quantity) {
+		if(this.invoiceFood == null) {
+			this.invoiceFood = new ArrayList<InvoiceFood>();
+		}
+		
+		if(hasFood(food)) {
+			InvoiceFood invoiceFood = getInvoiceFoodByFoodId(food.getId());
+			addQuantityToInvoice(invoiceFood,quantity);
+		}
+		else {
 		InvoiceFood invoiceFoodAssociation = new InvoiceFood();
 		invoiceFoodAssociation.setFood(food);
 		invoiceFoodAssociation.setFoodId(food.getId());
 		invoiceFoodAssociation.setInvoice(this);
 		invoiceFoodAssociation.setInvoiceId(this.getId());
 		invoiceFoodAssociation.setQuantity(quantity);
-		
-		if(this.food == null) {
-			this.food = new ArrayList<InvoiceFood>();
-		}
-		this.food.add(invoiceFoodAssociation);
+		this.invoiceFood.add(invoiceFoodAssociation);
+		}	
 	}
 
 	public List<InvoiceFood> getInvoiceFood() {
-		return food;
+		return invoiceFood;
 	}
 
 	public void setInvoiceFood(List<InvoiceFood> invoiceFood) {
-		this.food = invoiceFood;
+		this.invoiceFood = invoiceFood;
 	}
 
 	public Long getId() {
@@ -67,11 +74,11 @@ public class Invoice {
 	}
 
 	public List<InvoiceFood> getFood() {
-		return food;
+		return invoiceFood;
 	}
 
 	public void setFood(List<InvoiceFood> food) {
-		this.food = food;
+		this.invoiceFood = food;
 	}
 
 	public User getUser() {
@@ -104,7 +111,47 @@ public class Invoice {
 
 	public void setDay(String day) {
 		this.day = day;
-	}	
+	}
+	
+	private boolean hasFood(Food food) {
+		boolean hasFood=false;
+		if(this.invoiceFood != null) {
+			Iterator<InvoiceFood> invoiceFoodIterator = this.invoiceFood.iterator();
+			while(invoiceFoodIterator.hasNext()) {
+				Long foodId = invoiceFoodIterator.next().getFoodId();
+				Long newFoodId = food.getId();
+				if(foodId.equals(newFoodId)) {
+					hasFood =  true;
+				}
+			}
+		}
+		return hasFood;
+	}
+	
+	private InvoiceFood getInvoiceFoodByFoodId(Long toFindFoodId) {
+		InvoiceFood invoiceFoodToReturn = null;
+		if(this.invoiceFood != null) {
+			Iterator<InvoiceFood> invoiceFoodIterator = this.invoiceFood.iterator();
+			while(invoiceFoodIterator.hasNext()) {
+				InvoiceFood invoiceFood = invoiceFoodIterator.next();
+				Long foodId = invoiceFood.getFoodId();
+				if(foodId.equals(toFindFoodId)) {
+					invoiceFoodToReturn = invoiceFood;
+				}
+			}
+		}
+		return invoiceFoodToReturn;
+	}
+	
+	private void addQuantityToInvoice(InvoiceFood invoiceFood , Integer quantity) {
+		invoiceFood.addQuantity(quantity);
+	}
+	
+	public InvoiceFood removeFoodFromInvoce(Food food, Integer quantity) {
+		InvoiceFood invoiceFood = getInvoiceFoodByFoodId(food.getId());
+		invoiceFood.substractQuantity(quantity);
+		return invoiceFood;
+	}
 	
 	
 

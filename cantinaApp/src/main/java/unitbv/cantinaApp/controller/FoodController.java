@@ -1,5 +1,6 @@
 package unitbv.cantinaApp.controller;
 
+import java.util.Iterator;
 import java.util.List;
 
 import javax.validation.Valid;
@@ -18,8 +19,13 @@ import org.springframework.web.bind.annotation.RestController;
 import unitbv.cantinaApp.payload.ApiResponse;
 import unitbv.cantinaApp.payload.food.FoodRepresentation;
 import unitbv.cantinaApp.payload.food.NewFoodRequest;
+import unitbv.cantinaApp.repository.FoodInvoiceRepository;
+import unitbv.cantinaApp.repository.InvoiceRepository;
 import unitbv.cantinaApp.repository.entity.Food;
+import unitbv.cantinaApp.repository.entity.Invoice;
+import unitbv.cantinaApp.repository.entity.InvoiceFood;
 import unitbv.cantinaApp.service.FoodService;
+import unitbv.cantinaApp.service.InvoiceService;
 
 @RestController
 @RequestMapping("/api/food")
@@ -27,6 +33,12 @@ public class FoodController {
 	
 	@Autowired
     FoodService foodService;
+	
+	@Autowired
+	InvoiceRepository invoiceRepo;
+	
+	@Autowired
+	FoodInvoiceRepository foodInvoiceRepo;
 	
     @GetMapping("/getAll")
     @PreAuthorize("hasRole('USER')")
@@ -71,8 +83,5 @@ public class FoodController {
     	else {
     		return new ResponseEntity<>(new ApiResponse(result, "Internal error"),HttpStatus.BAD_REQUEST);
     	}
-
-    }
-    
-    
+    }   
 }

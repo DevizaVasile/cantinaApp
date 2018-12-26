@@ -5,13 +5,17 @@ import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import unitbv.cantinaApp.payload.invoice.InvoiceRepresentation;
+import unitbv.cantinaApp.payload.order.OrderRepresentation;
+import unitbv.cantinaApp.repository.FoodRepository;
 import unitbv.cantinaApp.repository.InvoiceRepository;
 import unitbv.cantinaApp.repository.UserRepository;
+import unitbv.cantinaApp.repository.entity.Food;
 import unitbv.cantinaApp.repository.entity.Invoice;
 import unitbv.cantinaApp.repository.entity.User;
 
@@ -25,6 +29,9 @@ public class InvoiceService {
 	
 	@Autowired
 	InvoiceRepository invoiceRepository;
+	
+	@Autowired
+	FoodRepository foodRepositlry;
 	
 	public Invoice createNewInvoice(User user,String day) throws ParseException {
 		if(!hasInvoiceForDay(user,day) ) {
@@ -82,9 +89,6 @@ public class InvoiceService {
 		return result;
 	}
 	
-	
-	
-	 
 	private boolean hasInvoiceForDay(User user,String day) {
 		return invoiceRepository.findByUserAndDay(user, day).isPresent();
 	}
@@ -100,5 +104,36 @@ public class InvoiceService {
 			isValidday=false;
 		}
 		return isValidday;
+	}
+	
+	public Invoice getInvoiceById(Long invoiceId) {
+		return invoiceRepository.findById(invoiceId).get();
+	}
+	
+	public void addFoodToInvoice(Invoice invoice, List<OrderRepresentation>orderRepresentationList) {
+		Iterator<OrderRepresentation> orderRepresentationListIterator = orderRepresentationList.iterator();
+		while(orderRepresentationListIterator.hasNext()) {
+			OrderRepresentation orderRepresentation = orderRepresentationListIterator.next();
+			Optional<Food> optionalFood = foodRepositlry.findById(orderRepresentation.getFoodId());
+			if(optionalFood.isPresent()) {
+				Food food = optionalFood.get();
+				invoice.addFood(food, orderRepresentation.getQuantity());
+			}
+			invoiceRepository.save(invoice);
 		}
+	}
+	
+	public void removeFoodFromInvoice(Invoice invoice, List<OrderRepresentation>orderRepresentationList) {
+		Iterator<OrderRepresentation> orderRepresentationListIterator = orderRepresentationList.iterator();
+		while(orderRepresentationListIterator.hasNext()) {
+			OrderRepresentation orderRepresentation = orderRepresentationListIterator.next();
+			Optional<Food> optionalFood = foodRepositlry.findById(orderRepresentation.getFoodId());
+			if(optionalFood.isPresent()) {
+				Food food = optionalFood.get();
+				invoice.removeFoodFromInvoce(food, orderRepresentation.getQuantity());
+			}
+			invoiceRepository.save(invoice);
+		}
+	}
+	
 }
