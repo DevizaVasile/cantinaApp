@@ -12,11 +12,13 @@ import org.springframework.stereotype.Service;
 
 import unitbv.cantinaApp.payload.invoice.InvoiceRepresentation;
 import unitbv.cantinaApp.payload.order.OrderRepresentation;
+import unitbv.cantinaApp.repository.FoodInvoiceRepository;
 import unitbv.cantinaApp.repository.FoodRepository;
 import unitbv.cantinaApp.repository.InvoiceRepository;
 import unitbv.cantinaApp.repository.UserRepository;
 import unitbv.cantinaApp.repository.entity.Food;
 import unitbv.cantinaApp.repository.entity.Invoice;
+import unitbv.cantinaApp.repository.entity.InvoiceFood;
 import unitbv.cantinaApp.repository.entity.User;
 
 
@@ -32,6 +34,9 @@ public class InvoiceService {
 	
 	@Autowired
 	FoodRepository foodRepositlry;
+	
+	@Autowired
+	FoodInvoiceRepository foodInvoiceRepository;
 	
 	public Invoice createNewInvoice(User user,String day) throws ParseException {
 		if(!hasInvoiceForDay(user,day) ) {
@@ -124,15 +129,28 @@ public class InvoiceService {
 	}
 	
 	public void removeFoodFromInvoice(Invoice invoice, List<OrderRepresentation>orderRepresentationList) {
+		List<InvoiceFood> invoiceFoodToRemove = new ArrayList<InvoiceFood>();
 		Iterator<OrderRepresentation> orderRepresentationListIterator = orderRepresentationList.iterator();
 		while(orderRepresentationListIterator.hasNext()) {
 			OrderRepresentation orderRepresentation = orderRepresentationListIterator.next();
 			Optional<Food> optionalFood = foodRepositlry.findById(orderRepresentation.getFoodId());
 			if(optionalFood.isPresent()) {
 				Food food = optionalFood.get();
-				invoice.removeFoodFromInvoce(food, orderRepresentation.getQuantity());
+				InvoiceFood invoiceFood = invoice.removeFoodFromInvoce(food, orderRepresentation.getQuantity());
+				if(invoiceFood.getQuantity() <= 0) {
+					invoiceFoodToRemove.add(invoiceFood);
+				}
 			}
-			invoiceRepository.save(invoice);
+			invoice = invoiceRepository.save(invoice);
+		}
+		
+		removeEmptyInvoiceFood(invoiceFoodToRemove);
+	}
+	
+	private void removeEmptyInvoiceFood(List<InvoiceFood> toRemove) {
+		Iterator<InvoiceFood> iterator = toRemove.iterator();
+		while(iterator.hasNext()) {
+			foodInvoiceRepository.delete(iterator.next());
 		}
 	}
 	
