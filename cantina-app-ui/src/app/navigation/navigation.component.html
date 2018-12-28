@@ -1,0 +1,15 @@
+<nav class="navbar navbar-expand-sm navbar-dark bg-dark">
+  <button class="navbar-toggler navbar-toggler-right" type="button" aria-controls="appNavigation" [attr.aria-expanded]="!isCollapsed" aria-label="Toggle navigation" (click)="toggleMenu()">
+    <span class="navbar-toggler-icon"></span>
+  </button>
+  <a class="navbar-brand" href="https://www.unitbv.ro/"> <img style="width:2.5rem; height:2.5rem" src="../../assets/media/unitbv.png" alt=""> </a>
+  <div class="collapse navbar-collapse" id="appNavigation" [ngbCollapse]="isCollapsed">
+    <div class="navbar-nav">
+      <a class="nav-item nav-link" routerLink="" routerLinkActive="active">Home</a>
+      <a class="nav-item nav-link" *ngIf="this.authService.isLoggedOut()" routerLink="/login" routerLinkActive="active">Login</a>
+      <a class="nav-item nav-link" *ngIf="this.authService.isLoggedOut()" routerLink="/register" routerLinkActive="active">Register</a>
+      <button disabled="true" class="nav-item nav-link btn btn-dark" *ngIf="this.authService.isLoggedIn()">{{email}}</button>
+      <button class="nav-item nav-link btn btn-dark" *ngIf="this.authService.isLoggedIn()" (click)="logout()">Log out</button>
+    </div>
+  </div>
+</nav>
