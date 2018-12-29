@@ -1,6 +1,5 @@
 package unitbv.cantinaApp.controller;
 
-import java.util.Iterator;
 import java.util.List;
 
 import javax.validation.Valid;
@@ -22,10 +21,7 @@ import unitbv.cantinaApp.payload.food.NewFoodRequest;
 import unitbv.cantinaApp.repository.FoodInvoiceRepository;
 import unitbv.cantinaApp.repository.InvoiceRepository;
 import unitbv.cantinaApp.repository.entity.Food;
-import unitbv.cantinaApp.repository.entity.Invoice;
-import unitbv.cantinaApp.repository.entity.InvoiceFood;
 import unitbv.cantinaApp.service.FoodService;
-import unitbv.cantinaApp.service.InvoiceService;
 
 @RestController
 @RequestMapping("/api/food")
