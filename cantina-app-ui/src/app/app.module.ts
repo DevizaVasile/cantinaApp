@@ -12,6 +12,12 @@ import { LoginComponent } from './login/login.component';
 import { HomepageComponent } from './homepage/homepage.component';
 import { NavigationComponent } from './navigation/navigation.component';
 import { RegisterComponent } from './register/register.component';
+import { AdminComponent } from './admin/admin.component';
+import { UnauthorizedComponent } from './unauthorized/unauthorized.component';
+import { StaffComponent } from './staff/staff.component';
+import { UserComponent } from './user/user.component';
+import { AuthService } from './services/auth.service';
+
 
 @NgModule({
   declarations: [
@@ -19,7 +25,11 @@ import { RegisterComponent } from './register/register.component';
     LoginComponent,
     HomepageComponent,
     NavigationComponent,
-    RegisterComponent
+    RegisterComponent,
+    AdminComponent,
+    UnauthorizedComponent,
+    StaffComponent,
+    UserComponent
   ],
   imports: [
     FormsModule,
@@ -33,7 +43,7 @@ import { RegisterComponent } from './register/register.component';
     provide: HTTP_INTERCEPTORS,
     useClass: InterceptorService,
     multi: true
-  }],
+  },AuthService],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

@@ -2,7 +2,6 @@ package unitbv.cantinaApp.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -71,11 +70,10 @@ public class AuthController {
                         loginRequest.getPassword()
                 )
         );
-       
+             
         SecurityContextHolder.getContext().setAuthentication(authentication);
         String jwt = tokenProvider.generateToken(authentication);
         Collection<?> roles = authentication.getAuthorities();
-        
         return ResponseEntity.ok(new JwtAuthenticationResponse(jwt,roles,loginRequest.getEmail(),jwtExpirationInMs));
     }
 

@@ -3,6 +3,10 @@ import {FormGroup, FormBuilder} from '@angular/forms';
 import { AuthService } from '../services/auth.service';
 import { Router } from '@angular/router';
 import { Validators } from '@angular/forms'
+import { Observable } from 'rxjs';
+import { filter, map, catchError} from 'rxjs/operators';
+import { throwError } from 'rxjs';
+
 
 @Component({
   selector: 'app-login',
@@ -11,6 +15,8 @@ import { Validators } from '@angular/forms'
 })
 export class LoginComponent implements OnInit {
   form:FormGroup;
+  error:boolean=false;
+  errorMessage:String="";
 
   constructor(private fb:FormBuilder, 
                private authService: AuthService, 
@@ -32,7 +38,8 @@ export class LoginComponent implements OnInit {
       if (val.email && val.password) {
           this.authService.login(val.email, val.password)
               .subscribe(
-                  () => {this.router.navigateByUrl('/');}
+                (val) => {this.router.navigateByUrl('/');},
+                (error) => {this.error=true; this.errorMessage=error}
               );
       }
   }
@@ -41,9 +48,5 @@ export class LoginComponent implements OnInit {
       this.authService.logout();
   }
 
-  check(){
-      console.log(this.authService.isLoggedIn())
-      console.log(this.authService.getExpiration())
-  }
 }
 

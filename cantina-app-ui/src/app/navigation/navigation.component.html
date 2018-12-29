@@ -8,8 +8,12 @@
       <a class="nav-item nav-link" routerLink="" routerLinkActive="active">Home</a>
       <a class="nav-item nav-link" *ngIf="this.authService.isLoggedOut()" routerLink="/login" routerLinkActive="active">Login</a>
       <a class="nav-item nav-link" *ngIf="this.authService.isLoggedOut()" routerLink="/register" routerLinkActive="active">Register</a>
+      <a class="nav-item nav-link" *ngIf="(this.authService.isLoggedIn() && this.authService.hasRole('ROLE_ADMIN'))" routerLink="/admin" routerLinkActive="active">Admin Panel</a>
+      <a class="nav-item nav-link" *ngIf="(this.authService.isLoggedIn() && this.authService.hasRole('ROLE_STAFF'))" routerLink="/staff" routerLinkActive="active">Staff Panel</a>
+      <a class="nav-item nav-link" *ngIf="(this.authService.isLoggedIn() && this.authService.hasRole('ROLE_USER'))" routerLink="/user" routerLinkActive="active">User Panel</a>
       <button disabled="true" class="nav-item nav-link btn btn-dark" *ngIf="this.authService.isLoggedIn()">{{email}}</button>
       <button class="nav-item nav-link btn btn-dark" *ngIf="this.authService.isLoggedIn()" (click)="logout()">Log out</button>
+      <button (click)="debugg()">Debugg</button>
     </div>
   </div>
 </nav>
