@@ -98,5 +98,30 @@ public class UserService {
 		}
 	}
 	
+	public boolean hasEnoughtMoney(User user,BigDecimal qunatity) {		
+		BigDecimal result = user.getBalance().subtract(qunatity);
+		BigDecimal zero = BigDecimal.valueOf(0);
+		if( result.compareTo(zero) >= 0 ) {
+			return true;
+		}
+		else {
+			return false;
+		}
+	}
+
+	public BigDecimal substractMoney(User user, BigDecimal qunatity) {
+		BigDecimal result = user.getBalance().subtract(qunatity);
+		user.setBalance(result);
+		userRepository.save(user);
+		return result;
+	}
+	
+	public BigDecimal addMoney(User user, BigDecimal qunatity) {
+		BigDecimal result = user.getBalance().add(qunatity);
+		user.setBalance(result);
+		userRepository.save(user);
+		return result;
+	}
+	
 	
 }
