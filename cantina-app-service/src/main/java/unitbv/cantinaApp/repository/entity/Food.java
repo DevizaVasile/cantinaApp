@@ -32,7 +32,10 @@ public class Food {
 	
 	@OneToMany(mappedBy="food", fetch = FetchType.EAGER, cascade=CascadeType.MERGE)
 	 private List<InvoiceFood> invoiceFood;
-
+	
+	@OneToMany(mappedBy="food", fetch = FetchType.LAZY, cascade=CascadeType.MERGE)
+	private List<Menu> menu;
+	
 	public Food() {
 	}
 

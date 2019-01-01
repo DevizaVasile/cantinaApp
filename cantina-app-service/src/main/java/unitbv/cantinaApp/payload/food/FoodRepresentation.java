@@ -12,6 +12,15 @@ public class FoodRepresentation {
 	public FoodRepresentation() {
 		super();
 	}
+	
+	public FoodRepresentation(String name, BigDecimal price, Integer weight, Long id, boolean visible) {
+		super();
+		this.name = name;
+		this.price = price;
+		this.weight = weight;
+		this.id = id;
+		this.visible = visible;
+	}
 
 	public String getName() {
 		return name;
