@@ -5,8 +5,7 @@ import {FormGroup, FormBuilder} from '@angular/forms';
 import {MatTableDataSource,MatPaginator,MatSort} from '@angular/material';
 import { Validators } from '@angular/forms'
 import {MatSnackBar} from '@angular/material';
-import {MatSnackBarModule} from "@angular/material";
-import { duration } from 'moment';
+
 @Component({
   selector: 'app-staff',
   templateUrl: './staff.component.html',
@@ -30,9 +29,9 @@ export class StaffComponent implements OnInit {
   constructor(private staffService: StaffService, private fb:FormBuilder, public snackBar: MatSnackBar) {
     this.updateForm = this.fb.group({
       name: ['',Validators.required],
-      price: ['',Validators.required],
+      price: ['',[Validators.required,Validators.pattern(/^[.\d]+$/)]],
       id:[ {value: '', disabled:true}],
-      weigth:['',Validators.required]
+      weigth:['',[Validators.required,Validators.pattern(/^[.\d]+$/)]]
   });
   }
 
@@ -71,16 +70,22 @@ export class StaffComponent implements OnInit {
       price:this.updateForm.value.price,
       weigth:this.updateForm.value.weigth
     }
-    this.staffService.updateFood(payload).subscribe( (response:any) => {
+    this.staffService.updateFood(payload).subscribe( 
+      (response:any) => {
         if(response.success){
           this.snackBar.open(response.message,"x",{duration:2000})
           let that=this;
           setTimeout( ()=>{this.getAllFood()},1000)
         }
         else{
-          this.snackBar.open(response.message,"x",{duration:2000})
+          this.snackBar.open("Error","x",{duration:2000})
+          console.log(response)
         }
+      },
 
+      (error:any) =>{
+        this.snackBar.open(error,"x",{duration:2000})
+        console.log(typeof(error))
       }
     )
   }

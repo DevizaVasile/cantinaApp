@@ -55,7 +55,7 @@
           </mat-form-field>
           </fieldset>
 
-          <button mat-raised-button color="primary" (click)="updateFood()">Update</button>
+          <button [disabled]="!updateForm.valid" mat-raised-button color="primary" (click)="updateFood()">Update</button>
           </form>
       </div>
 
