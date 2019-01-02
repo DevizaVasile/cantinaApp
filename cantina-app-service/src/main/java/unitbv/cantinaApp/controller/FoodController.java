@@ -65,7 +65,7 @@ public class FoodController {
     	foodRepresentation.setName(food.getName());
     	foodRepresentation.setPrice(food.getPrice());
     	foodRepresentation.setVisible(food.getActive());
-    	foodRepresentation.setWeight(food.getWeight());
+    	foodRepresentation.setWeigth(food.getWeight());
     	return foodRepresentation;
     }
     

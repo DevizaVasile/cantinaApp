@@ -102,7 +102,8 @@ public class FoodService {
 			foodRepresentation.setId(food.getId());
 			foodRepresentation.setName(food.getName());
 			foodRepresentation.setPrice(food.getPrice());
-			foodRepresentation.setWeight(food.getWeight());
+			foodRepresentation.setWeigth(food.getWeight());
+			foodRepresentation.setVisible(food.getActive());
 			allFoodRepresentation.add(foodRepresentation);
 		}
 		return allFoodRepresentation;
@@ -114,7 +115,7 @@ public class FoodService {
     	food.setName(foodRepresentation.getName());
     	food.setActive(foodRepresentation.isVisible());
     	food.setPrice(foodRepresentation.getPrice());
-    	food.setWeight(foodRepresentation.getWeight());
+    	food.setWeight(foodRepresentation.getWeigth());
 		foodRepository.save(food);
 		return true;
 		}

@@ -1,3 +1,71 @@
-<p>
-  staff works!
-</p>
+  <div class="content">
+  <mat-tab-group class="d-flex justify-content-start">
+    <mat-tab  label="CRUD Operations">
+    <div  class="d-flex justify-content-start">
+      <div class="border border-dark m-1 col-4">
+        <mat-form-field>
+            <input matInput (keyup)="applyFilter($event.target.value)" placeholder="Filter">
+        </mat-form-field>
+        <mat-table #table [dataSource]="dataSource" matSort>
+          <!-- Name Column -->
+          <ng-container matColumnDef="name">
+            <mat-header-cell *matHeaderCellDef mat-sort-header> Name </mat-header-cell>
+            <mat-cell *matCellDef="let element"> {{element.name}} </mat-cell>
+          </ng-container>
+        
+          <!-- Weigth Column -->
+          <ng-container matColumnDef="weigth">
+            <mat-header-cell *matHeaderCellDef mat-sort-header> Weigth </mat-header-cell>
+            <mat-cell *matCellDef="let element"> {{element.weigth}} </mat-cell>
+          </ng-container>
+
+          <!-- Price Column -->
+          <ng-container matColumnDef="price">
+            <mat-header-cell *matHeaderCellDef mat-sort-header> Price </mat-header-cell>
+            <mat-cell *matCellDef="let element"> {{element.price}} </mat-cell>
+          </ng-container>
+        
+        
+          <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+          <mat-row *matRowDef="let row; columns: displayedColumns;" style="cursor: pointer;" (click)="getRecord(row)"></mat-row>
+        </mat-table>
+        <mat-paginator 
+        #paginator
+        [pageSize]="10"
+        [pageSizeOptions]="[5, 10, 20]"
+        [showFirstLastButtons]="true"
+        [pageIndex]="0">
+        </mat-paginator>
+      </div>
+
+      <div class="border border-dark m-1 col-3"  style="max-width: 200px; max-height: 300px;">
+          <form [formGroup]="updateForm">
+              <fieldset>
+            <mat-form-field class="col-12">
+                <input name="id" formControlName="id" matInput placeholder="ID">
+            </mat-form-field>
+            <mat-form-field class="col-12">
+                <input name="name" formControlName="name" matInput placeholder="Name">
+            </mat-form-field>
+            <mat-form-field class="col-12">
+                <input name="weigth" formControlName="weigth" matInput placeholder="Weigth">
+            </mat-form-field>
+            <mat-form-field class="col-12">
+                <input name="price" formControlName="price" matInput placeholder="Price">
+          </mat-form-field>
+          </fieldset>
+
+          <button mat-raised-button color="primary" (click)="updateFood()">Update</button>
+          </form>
+      </div>
+
+    </div>
+    </mat-tab>
+
+    <mat-tab label="Second"> 
+
+    </mat-tab>
+
+    <mat-tab label="Third"> Content 3 </mat-tab>
+  </mat-tab-group>
+</div>

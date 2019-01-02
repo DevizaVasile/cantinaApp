@@ -5,7 +5,7 @@ import java.math.BigDecimal;
 public class FoodRepresentation {
 	private String name;
 	private BigDecimal price;
-	private Integer weight;
+	private Integer weigth;
 	private Long id;
 	private boolean visible;
 	
@@ -13,11 +13,11 @@ public class FoodRepresentation {
 		super();
 	}
 	
-	public FoodRepresentation(String name, BigDecimal price, Integer weight, Long id, boolean visible) {
+	public FoodRepresentation(String name, BigDecimal price, Integer weigth, Long id, boolean visible) {
 		super();
 		this.name = name;
 		this.price = price;
-		this.weight = weight;
+		this.weigth = weigth;
 		this.id = id;
 		this.visible = visible;
 	}
@@ -38,12 +38,12 @@ public class FoodRepresentation {
 		this.price = price;
 	}
 
-	public Integer getWeight() {
-		return weight;
+	public Integer getWeigth() {
+		return weigth;
 	}
 
-	public void setWeight(Integer weight) {
-		this.weight = weight;
+	public void setWeigth(Integer weight) {
+		this.weigth = weight;
 	}
 
 	public Long getId() {
