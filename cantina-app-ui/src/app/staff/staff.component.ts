@@ -25,18 +25,27 @@ export class StaffComponent implements OnInit {
   @ViewChild(MatPaginator) paginator: MatPaginator;
 
   updateForm:FormGroup;
+  createForm:FormGroup;
 
   constructor(private staffService: StaffService, private fb:FormBuilder, public snackBar: MatSnackBar) {
     this.updateForm = this.fb.group({
       name: ['',Validators.required],
       price: ['',[Validators.required,Validators.pattern(/^[.\d]+$/)]],
       id:[ {value: '', disabled:true}],
-      weigth:['',[Validators.required,Validators.pattern(/^[.\d]+$/)]]
-  });
+      weigth:['',[Validators.required,Validators.pattern(/^[1-9][0-9]*$/)]]
+    });
+
+    this.createForm = this.fb.group({
+      name: ['',Validators.required],
+      price: ['',[Validators.required,Validators.pattern(/^[.\d]+$/)]],
+      weigth:['',[Validators.required,Validators.pattern(/^[1-9][0-9]*$/)]]
+    });
   }
 
   ngOnInit() {
     this.getAllFood();
+    this.dataSource.sort=this.sort;
+    this.dataSource.paginator=this.paginator
   }
 
   applyFilter(filterValue: string) {
@@ -52,7 +61,7 @@ export class StaffComponent implements OnInit {
     this.staffService.getFood().subscribe( (res:Array<Object>) => {
       this.allFood=[];
       res.forEach(obj => {this.allFood.push(obj)})
-      this.dataSource = new MatTableDataSource(this.allFood);
+      this.dataSource = new MatTableDataSource(this.allFood.reverse());
       this.dataSource.sort = this.sort;
       this.dataSource.paginator = this.paginator;
       });
@@ -74,18 +83,40 @@ export class StaffComponent implements OnInit {
       (response:any) => {
         if(response.success){
           this.snackBar.open(response.message,"x",{duration:2000})
-          let that=this;
           setTimeout( ()=>{this.getAllFood()},1000)
         }
         else{
           this.snackBar.open("Error","x",{duration:2000})
-          console.log(response)
         }
       },
 
       (error:any) =>{
         this.snackBar.open(error,"x",{duration:2000})
-        console.log(typeof(error))
+      }
+    )
+  }
+
+  createNewFood(){
+    let payload = {
+      visible:true,
+      name:this.createForm.value.name,
+      price:this.createForm.value.price,
+      weigth:this.createForm.value.weigth
+    }
+    this.staffService.createNewFood(payload).subscribe(
+      (response:any) => {
+        if(response.success){
+          this.snackBar.open(response.message,"x",{duration:2000})
+          this.createForm.reset()
+          setTimeout( ()=>{this.getAllFood()},1000)
+        }
+        else{
+          this.snackBar.open("Error","x",{duration:2000})
+        }
+      },
+
+      (error:any) => {
+        this.snackBar.open(error,"x",{duration:2000})
       }
     )
   }

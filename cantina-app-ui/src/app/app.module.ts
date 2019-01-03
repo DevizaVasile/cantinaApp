@@ -12,6 +12,7 @@ import {MatPaginatorModule} from '@angular/material/paginator';
 import {MatInputModule} from '@angular/material';
 import {MatButtonModule} from '@angular/material/button';
 import {MatSnackBarModule} from "@angular/material";
+import {MatSortModule} from "@angular/material"
 
 import { InterceptorService } from './services/interceptor.service';
 import { AppRoutingModule } from './app-routing.module';
@@ -54,7 +55,8 @@ import { StaffService } from './services/staff.service'
     MatPaginatorModule,
     MatInputModule,
     MatButtonModule,
-    MatSnackBarModule
+    MatSnackBarModule,
+    MatSortModule
   ],
   providers: [
     {

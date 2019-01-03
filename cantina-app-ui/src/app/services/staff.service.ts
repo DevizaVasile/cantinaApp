@@ -30,4 +30,13 @@ export class StaffService {
       })
     );
   }
+
+  createNewFood(payload:Object){
+    return this.http.post("http://www.localhost:5000/api/food/create",payload).pipe(
+      tap((res => res)),
+      catchError(err => {
+          return throwError(err.error.message)
+      })
+    );
+  }
 }
