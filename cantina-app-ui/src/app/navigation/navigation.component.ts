@@ -30,9 +30,4 @@ export class NavigationComponent implements OnInit {
   ngOnInit() {
     this.email = localStorage.getItem("email");
   }
-
-  debugg(){
-    console.log(this.email)
-  }
-
 }

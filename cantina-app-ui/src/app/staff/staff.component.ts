@@ -21,8 +21,18 @@ export class StaffComponent implements OnInit {
   displayedColumns = ['name', 'weigth','price'];
   dataSource = new MatTableDataSource(this.allFood);
 
+
+  futureWorkingDays: Array<Object> = [];
+  displayedWorkingDaysColumns = ['day', 'visible'];
+  workingDayDataSource = new MatTableDataSource(this.futureWorkingDays);
+
+  minDate = new Date();
+  maxDate = new Date();
+
   @ViewChild(MatSort) sort: MatSort;
-  @ViewChild(MatPaginator) paginator: MatPaginator;
+  @ViewChild(MatSort) sort2: MatSort;
+  @ViewChild("paginator") paginator: MatPaginator;
+  @ViewChild("paginator2") paginator2: MatPaginator;
 
   updateForm:FormGroup;
   createForm:FormGroup;
@@ -40,12 +50,17 @@ export class StaffComponent implements OnInit {
       price: ['',[Validators.required,Validators.pattern(/^[.\d]+$/)]],
       weigth:['',[Validators.required,Validators.pattern(/^[1-9][0-9]*$/)]]
     });
+ 
+    this.maxDate.setFullYear(this.minDate.getFullYear()+1);
   }
 
   ngOnInit() {
     this.getAllFood();
+    this.getFutureWorkingDays();
     this.dataSource.sort=this.sort;
     this.dataSource.paginator=this.paginator
+    this.workingDayDataSource.paginator=this.paginator2
+    this.workingDayDataSource.sort=this.sort2;
   }
 
   applyFilter(filterValue: string) {
@@ -56,6 +71,10 @@ export class StaffComponent implements OnInit {
       this.dataSource.paginator.firstPage();
     }
   }
+
+  // *****
+  // TAB #1 logic
+  // *****
 
   getAllFood(){
     this.staffService.getFood().subscribe( (res:Array<Object>) => {
@@ -120,5 +139,45 @@ export class StaffComponent implements OnInit {
       }
     )
   }
+
+  // *****
+  // TAB #2 logic
+  // *****
+
+  getFutureWorkingDays(){
+    const sorter =function(a,b) {
+      if (a.day < b.day)
+        return -1;
+      if (a.day > b.day)
+        return 1;
+      return 0;
+    }
+    this.staffService.getFutureWorkigDays().subscribe( (res:Array<Object>) => {
+      res.forEach(obj => {this.futureWorkingDays.push(obj)});
+      this.workingDayDataSource = new MatTableDataSource(this.futureWorkingDays.sort(sorter));
+      this.workingDayDataSource.sort = this.sort2;
+      this.workingDayDataSource.paginator = this.paginator2;    
+      });  
+  }
+
+  applyFilter2(filterValue: string) {
+    filterValue = filterValue.trim(); // Remove whitespace
+    filterValue = filterValue.toLowerCase(); // Datasource defaults to lowercase matches
+    this.workingDayDataSource.filter = filterValue;
+    if (this.workingDayDataSource.paginator) {
+      this.workingDayDataSource.paginator.firstPage();
+    }
+  }
+
+  dayFilter = (d: Date): boolean => {
+    const day = d.getDay();
+    // Prevent Saturday and Sunday from being selected.
+    return day !== 0 && day !== 6;
+  }
+  
+  debugg(){
+    // console.log(this.maxDate)
+  }
+
 
 }

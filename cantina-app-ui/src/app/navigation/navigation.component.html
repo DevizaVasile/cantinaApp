@@ -13,7 +13,6 @@
       <a class="nav-item nav-link" *ngIf="(this.authService.isLoggedIn() && this.authService.hasRole('ROLE_USER'))" routerLink="/user" routerLinkActive="active">User Panel</a>
       <button disabled="true" class="nav-item nav-link btn btn-dark" *ngIf="this.authService.isLoggedIn()">{{email}}</button>
       <button class="nav-item nav-link btn btn-dark" *ngIf="this.authService.isLoggedIn()" (click)="logout()">Log out</button>
-      <button (click)="debugg()">Debugg</button>
     </div>
   </div>
 </nav>

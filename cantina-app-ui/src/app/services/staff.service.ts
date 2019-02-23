@@ -39,4 +39,12 @@ export class StaffService {
       })
     );
   }
+
+  getFutureWorkigDays(){
+    return this.http.get("http://localhost:5000/api/workingDay/getFutureWorkingDays",{}).pipe(
+      tap( res => {}),
+      catchError(err => {
+         return throwError(err.error.message)})   
+      );    
+}
 }

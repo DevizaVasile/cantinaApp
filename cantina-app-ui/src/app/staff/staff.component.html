@@ -31,8 +31,8 @@
         </mat-table>
         <mat-paginator 
         #paginator
-        [pageSize]="10"
-        [pageSizeOptions]="[5, 10, 20]"
+        [pageSize]="7"
+        [pageSizeOptions]="[5, 7, 10]"
         [showFirstLastButtons]="true"
         [pageIndex]="0">
         </mat-paginator>
@@ -83,9 +83,48 @@
     </div>
     </mat-tab>
 
-    <mat-tab label="Working days"> 
+    <mat-tab label="Working days">
+      <div  class="d-flex justify-content-start">
+          <div class="border border-dark m-2 p-2 col-4">
+              <mat-form-field>
+                  <input matInput (keyup)="applyFilter2($event.target.value)" placeholder="Filter">
+              </mat-form-field>
+              <mat-table #table [dataSource]="workingDayDataSource" matSort>
+                <!-- Name Column -->
+                <ng-container matColumnDef="day">
+                  <mat-header-cell *matHeaderCellDef mat-sort-header> Day </mat-header-cell>
+                  <mat-cell *matCellDef="let element"> {{element.day}} </mat-cell>
+                </ng-container>
+              
+                <!-- Weigth Column -->
+                <ng-container matColumnDef="visible">
+                  <mat-header-cell *matHeaderCellDef mat-sort-header> Active </mat-header-cell>
+                  <mat-cell *matCellDef="let element"> {{element.visible}} </mat-cell>
+                </ng-container>
+                 
+                <mat-header-row *matHeaderRowDef="displayedWorkingDaysColumns"></mat-header-row>
+                <mat-row *matRowDef="let row; columns: displayedWorkingDaysColumns;"></mat-row>
+              </mat-table>
+              <mat-paginator 
+              #paginator2
+              [pageSize]="7"
+              [pageSizeOptions]="[5, 7, 10]"
+              [showFirstLastButtons]="true"
+              [pageIndex]="0">
+              </mat-paginator>
+            </div>
 
+            <div class="border border-dark m-2 p-2 col-4">
+                <mat-form-field class="example-full-width">
+                    <input [min]="minDate" [max]="maxDate" matInput [matDatepickerFilter]="dayFilter" [matDatepicker]="picker" placeholder="Choose a date">
+                    <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+                    <mat-datepicker #picker></mat-datepicker>
+                  </mat-form-field>
+            </div>
+          <button (click)="debugg()">Debugg</button>
+      </div>
     </mat-tab>
+  
 
     <mat-tab label="Third"> Content 3 </mat-tab>
   </mat-tab-group>

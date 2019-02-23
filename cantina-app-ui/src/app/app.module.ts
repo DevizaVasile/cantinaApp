@@ -13,6 +13,8 @@ import {MatInputModule} from '@angular/material';
 import {MatButtonModule} from '@angular/material/button';
 import {MatSnackBarModule} from "@angular/material";
 import {MatSortModule} from "@angular/material"
+import {MatDatepickerModule} from '@angular/material/datepicker';
+import {MatNativeDateModule} from '@angular/material';
 
 import { InterceptorService } from './services/interceptor.service';
 import { AppRoutingModule } from './app-routing.module';
@@ -56,7 +58,9 @@ import { StaffService } from './services/staff.service'
     MatInputModule,
     MatButtonModule,
     MatSnackBarModule,
-    MatSortModule
+    MatSortModule,
+    MatDatepickerModule,
+    MatNativeDateModule
   ],
   providers: [
     {
@@ -65,7 +69,8 @@ import { StaffService } from './services/staff.service'
     multi: true
     },
     AuthService,
-    StaffService
+    StaffService,
+    MatDatepickerModule
   ],
   bootstrap: [AppComponent]
 })
