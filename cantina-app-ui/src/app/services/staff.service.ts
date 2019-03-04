@@ -32,7 +32,7 @@ export class StaffService {
   }
 
   createNewFood(payload:Object){
-    return this.http.post("http://www.localhost:5000/api/food/create",payload).pipe(
+    return this.http.post("http://www.localhost:5000/api/food/create/"+payload, {}).pipe(
       tap((res => res)),
       catchError(err => {
           return throwError(err.error.message)
@@ -41,10 +41,29 @@ export class StaffService {
   }
 
   getFutureWorkigDays(){
-    return this.http.get("http://localhost:5000/api/workingDay/getFutureWorkingDays",{}).pipe(
+    return this.http.get("http://localhost:5000/api/workingDay/getFutureWorkingDays", {}).pipe(
       tap( res => {}),
       catchError(err => {
          return throwError(err.error.message)})   
-      );    
+      ); 
+  }
+
+  checkIfDayAlreadyExists(payload:Object){
+    return this.http.get("http://localhost:5000/api/workingDay/getExist/"+payload, {}).pipe(
+      tap( res => {}),
+      catchError(err => {
+         return throwError(err.error.message)})   
+      ); 
+  }
+
+  createNewWorkingDay(payload:Object){
+    return this.http.post("http://localhost:5000/api/workingDay/create/"+payload, {}).pipe(
+      tap( res => {}),
+      catchError(err => {
+         return throwError(err.error.message)})   
+      ); 
+  }
+
 }
-}
+
+

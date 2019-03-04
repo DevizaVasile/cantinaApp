@@ -5,6 +5,7 @@ import {FormGroup, FormBuilder} from '@angular/forms';
 import {MatTableDataSource,MatPaginator,MatSort} from '@angular/material';
 import { Validators } from '@angular/forms'
 import {MatSnackBar} from '@angular/material';
+import {  MatDatepickerInputEvent} from '@angular/material'
 
 @Component({
   selector: 'app-staff',
@@ -28,6 +29,8 @@ export class StaffComponent implements OnInit {
 
   minDate = new Date();
   maxDate = new Date();
+  curentSelectedDate:String;
+  createNewWorkingDayDisabled:Boolean;
 
   @ViewChild(MatSort) sort: MatSort;
   @ViewChild(MatSort) sort2: MatSort;
@@ -51,7 +54,9 @@ export class StaffComponent implements OnInit {
       weigth:['',[Validators.required,Validators.pattern(/^[1-9][0-9]*$/)]]
     });
  
-    this.maxDate.setFullYear(this.minDate.getFullYear()+1);
+    // this.maxDate.setFullYear(this.minDate.getFullYear()+1);
+    this.maxDate.setMonth(this.maxDate.getMonth()+1);
+    this.createNewWorkingDayDisabled=true;
   }
 
   ngOnInit() {
@@ -153,6 +158,7 @@ export class StaffComponent implements OnInit {
       return 0;
     }
     this.staffService.getFutureWorkigDays().subscribe( (res:Array<Object>) => {
+      this.futureWorkingDays=[];
       res.forEach(obj => {this.futureWorkingDays.push(obj)});
       this.workingDayDataSource = new MatTableDataSource(this.futureWorkingDays.sort(sorter));
       this.workingDayDataSource.sort = this.sort2;
@@ -174,9 +180,49 @@ export class StaffComponent implements OnInit {
     // Prevent Saturday and Sunday from being selected.
     return day !== 0 && day !== 6;
   }
+
+  calendarSelectionChange(type: string, event: MatDatepickerInputEvent<Date>){
+    let year =  event.value.getFullYear();
+    let month = (event.value.getMonth()+1).toString();
+    
+    if(month.length==1){
+      month = "0"+month.toString();
+    }
+    let day = event.value.getDate().toString();
+    if(day.length==1){
+      day = "0"+day.toString();
+    }
+    this.curentSelectedDate = year.toString()+"-"+month.toString()+"-"+day.toString();
+    this.staffService.checkIfDayAlreadyExists(this.curentSelectedDate).subscribe( 
+      (response:any) => {
+          if(response.success === true){
+            this.createNewWorkingDayDisabled=true;
+          }
+          else{
+            this.createNewWorkingDayDisabled=false;
+          }
+      }
+     );
+  }
+
+  createNewWorkingDay(){
+    this.staffService.createNewWorkingDay(this.curentSelectedDate).subscribe(
+      (response:any) => {
+        this.snackBar.open(response.message,"x",{duration:2000})
+        this.createNewWorkingDayDisabled=true;
+        this.getFutureWorkingDays();
+      }
+    )
+    
+  }
+
+  
   
   debugg(){
-    // console.log(this.maxDate)
+    
+    console.log(this.maxDate)
+    console.log(this.minDate)
+    debugger
   }
 
 

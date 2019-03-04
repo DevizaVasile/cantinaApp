@@ -79,6 +79,9 @@ public class AuthController {
 
     @PostMapping("/signup")
     public ResponseEntity<?> registerUser(@Valid @RequestBody SignUpRequest signUpRequest) {
+    	
+    	System.out.println(signUpRequest.getEmail().toString());
+    	System.out.println(signUpRequest.getPassword().toString());
 
         if(userRepository.existsByEmail(signUpRequest.getEmail())) {
             return new ResponseEntity<>(new ApiResponse(false, "Email Address already in use!"),

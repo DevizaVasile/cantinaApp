@@ -52,4 +52,15 @@ public class WorkingDayController {
 		return  workingDayService.getAllFutureWorkingDays();
 	}
 	
+	@GetMapping("/getExist/{day}")
+	public ResponseEntity<?> checkIfDayExist(@PathVariable("day") String day) {
+		java.time.LocalDate date = java.time.LocalDate.parse(day);
+		if(workingDayService.alreadyExist(date)) {
+			return new ResponseEntity<>(new ApiResponse(true, "Woring day exist"),HttpStatus.OK); 
+		}
+		else {
+			return new ResponseEntity<>(new ApiResponse(false, "Woring day does not exist"),HttpStatus.OK); 
+		}
+	}
+	
 }
