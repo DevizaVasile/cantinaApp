@@ -15,6 +15,8 @@ import {MatSnackBarModule} from "@angular/material";
 import {MatSortModule} from "@angular/material"
 import {MatDatepickerModule} from '@angular/material/datepicker';
 import {MatNativeDateModule} from '@angular/material';
+import {DragDropModule} from '@angular/cdk/drag-drop';
+import {MatCheckboxModule} from '@angular/material/checkbox';
 
 import { InterceptorService } from './services/interceptor.service';
 import { AppRoutingModule } from './app-routing.module';
@@ -60,7 +62,9 @@ import { StaffService } from './services/staff.service'
     MatSnackBarModule,
     MatSortModule,
     MatDatepickerModule,
-    MatNativeDateModule
+    MatNativeDateModule,
+    DragDropModule,
+    MatCheckboxModule
   ],
   providers: [
     {

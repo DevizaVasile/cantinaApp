@@ -7,20 +7,20 @@
         <div class="col-12 m-1">
           <form [formGroup]="updateForm">
               <fieldset>
-            <mat-form-field class="col-12 small-font-size">
-                <input name="id" formControlName="id" matInput placeholder="ID">
-            </mat-form-field>
-            <mat-form-field class="col-12 small-font-size">
-                <input name="name" formControlName="name" matInput placeholder="Name">
-            </mat-form-field>
-            <mat-form-field class="col-12 small-font-size">
-                <input name="weigth" formControlName="weigth" matInput placeholder="Weigth">
-            </mat-form-field>
-            <mat-form-field class="col-12 small-font-size">
-                <input name="price" formControlName="price" matInput placeholder="Price">
-          </mat-form-field>
-          </fieldset>
-         
+                <mat-checkbox (change)="updateActiveFood($event)" [checked]="checkedActive">Active</mat-checkbox>
+                <mat-form-field class="col-12 small-font-size">
+                    <input name="id" formControlName="id" matInput placeholder="ID">
+                </mat-form-field>
+                <mat-form-field class="col-12 small-font-size">
+                    <input name="name" formControlName="name" matInput placeholder="Name">
+                </mat-form-field>
+                <mat-form-field class="col-12 small-font-size">
+                    <input name="weigth" formControlName="weigth" matInput placeholder="Weigth">
+                </mat-form-field>
+                <mat-form-field class="col-12 small-font-size">
+                    <input name="price" formControlName="price" matInput placeholder="Price">
+                </mat-form-field>
+          </fieldset>         
           <button class="m-1"  [disabled]="!updateForm.valid" mat-raised-button color="primary" (click)="updateFood()">Update</button>
           </form>
         </div>
@@ -53,7 +53,7 @@
             <mat-header-cell *matHeaderCellDef mat-sort-header> Name </mat-header-cell>
             <mat-cell *matCellDef="let element"> {{element.name}} </mat-cell>
           </ng-container>
-        
+
           <!-- Weigth Column -->
           <ng-container matColumnDef="weigth">
             <mat-header-cell *matHeaderCellDef mat-sort-header> Weigth </mat-header-cell>
@@ -65,6 +65,13 @@
             <mat-header-cell *matHeaderCellDef mat-sort-header> Price </mat-header-cell>
             <mat-cell *matCellDef="let element"> {{element.price}} </mat-cell>
           </ng-container>
+
+          <!-- Price Active -->
+          <ng-container matColumnDef="visible">
+              <mat-header-cell *matHeaderCellDef mat-sort-header> Visible </mat-header-cell>
+              <mat-cell *matCellDef="let element"> {{element.visible}} </mat-cell>
+              <!-- <mat-checkbox [checked]="element.visible" (change)="updateActiveFood($event)">Check me!</mat-checkbox> -->
+            </ng-container>
         
         
           <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
@@ -78,9 +85,9 @@
         [pageIndex]="0">
         </mat-paginator>
       </div>
-
     </div>
     </mat-tab>
+
 
     <mat-tab label="Working days">
       <div  class="d-flex justify-content-start">
@@ -102,7 +109,7 @@
                 </ng-container>
                  
                 <mat-header-row *matHeaderRowDef="displayedWorkingDaysColumns"></mat-header-row>
-                <mat-row *matRowDef="let row; columns: displayedWorkingDaysColumns;" (click)="getDay(row)"></mat-row>
+                <mat-row *matRowDef="let row; columns: displayedWorkingDaysColumns;" (click)="getDay(row)" style="cursor: pointer;"></mat-row>
               </mat-table>
               <mat-paginator 
               #paginator2
@@ -115,10 +122,10 @@
 
             <div class="align-self-start border border-dark m-2 p-2 col-xl-3 col-lg-3 col-md-4">
                 <mat-form-field>
-                    <input [min]="minDate" [max]="maxDate" matInput [matDatepickerFilter]="dayFilter" 
+                    <input [min]="minDate" [max]="maxDate" matInput [matDatepickerFilter]="dayFilter"  disabled="true"
                       [matDatepicker]="picker" placeholder="Choose a date" (dateInput)="calendarSelectionChange('input', $event)">
                     <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
-                    <mat-datepicker #picker></mat-datepicker>
+                    <mat-datepicker disabled="false" #picker></mat-datepicker>
                   </mat-form-field>
                   <br>
                   <button mat-stroked-button color="primary" [disabled]="createNewWorkingDayDisabled" (click)="createNewWorkingDay()">Create new wd</button>
@@ -127,6 +134,36 @@
     </mat-tab>
   
 
-    <mat-tab label="Third"> Content 3 </mat-tab>
+    <mat-tab disabled="true" label="Third"> Content 3    
+      <div class="d-flex justify-content-start">
+      </div>
+      <div class="example-container">
+          <h2>To do</h2>
+        
+          <div
+            cdkDropList
+            #todoList="cdkDropList"
+            [cdkDropListData]="this.allFood"
+            [cdkDropListConnectedTo]="[doneList]"
+            class="example-list"
+            (cdkDropListDropped)="drop($event)">
+            <div class="example-box" *ngFor="let item of this.allFood" cdkDrag>{{item.name}}</div>
+          </div>
+        </div>
+        
+        <div class="example-container">
+          <h2>Done</h2>
+        
+          <div
+            cdkDropList
+            #doneList="cdkDropList"
+            [cdkDropListData]="done"
+            [cdkDropListConnectedTo]="[todoList]"
+            class="example-list"
+            (cdkDropListDropped)="drop($event)">
+            <div class="example-box" *ngFor="let item of done" cdkDrag>{{item.name}}</div>
+          </div>
+        </div>
+    </mat-tab>
   </mat-tab-group>
 </div>

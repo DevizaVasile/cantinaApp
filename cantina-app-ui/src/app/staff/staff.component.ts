@@ -1,11 +1,13 @@
 import { Component, OnInit, ViewChild, ElementRef  } from '@angular/core';
+import {CdkDragDrop, moveItemInArray, transferArrayItem} from '@angular/cdk/drag-drop';
 import { StaffService} from '../services/staff.service'
 
 import {FormGroup, FormBuilder} from '@angular/forms';
 import {MatTableDataSource,MatPaginator,MatSort} from '@angular/material';
 import { Validators } from '@angular/forms'
 import {MatSnackBar} from '@angular/material';
-import {  MatDatepickerInputEvent} from '@angular/material'
+import {MatDatepickerInputEvent} from '@angular/material'
+import { debug } from 'util';
 
 @Component({
   selector: 'app-staff',
@@ -18,10 +20,22 @@ import {  MatDatepickerInputEvent} from '@angular/material'
 
 export class StaffComponent implements OnInit {
 
+  todo = [
+    'Get to work',
+    'Pick up groceries',
+    'Go home',
+    'Fall asleep'
+  ];
+
+  done = [
+  ];
+
   selectedTab:Number;
 
+  checkedActive:Boolean=false;
+
   allFood: Array<Object> = [];
-  displayedColumns = ['name', 'weigth','price'];
+  displayedColumns = ['name', 'weigth','price','visible'];
   dataSource = new MatTableDataSource(this.allFood);
 
 
@@ -52,7 +66,8 @@ export class StaffComponent implements OnInit {
       name: ['',Validators.required],
       price: ['',[Validators.required,Validators.pattern(/^[.\d]+$/)]],
       id:[ {value: '', disabled:true}],
-      weigth:['',[Validators.required,Validators.pattern(/^[1-9][0-9]*$/)]]
+      weigth:['',[Validators.required,Validators.pattern(/^[1-9][0-9]*$/)]],
+      active:false
     });
 
     this.createForm = this.fb.group({
@@ -99,13 +114,25 @@ export class StaffComponent implements OnInit {
   }
 
   getRecord(oEvent){
-    this.updateForm.patchValue(oEvent)
+    this.updateForm.patchValue(oEvent);
+    this.checkedActive=oEvent.visible;
+  }
+
+  updateActiveFood($event){
+    this.checkedActive=$event.checked;
   }
 
   updateFood(){
+    let visibleVal
+    if(this.checkedActive===true){
+      visibleVal=1;
+    }
+    else{
+      visibleVal=0;
+    }
     let payload = {
       id:this.updateForm.getRawValue().id,
-      visible:true,
+      visible:visibleVal,
       name:this.updateForm.value.name,
       price:this.updateForm.value.price,
       weigth:this.updateForm.value.weigth
@@ -228,14 +255,18 @@ export class StaffComponent implements OnInit {
    
   }
 
-  
-  
-  debugg(){
-    
-    console.log(this.maxDate)
-    console.log(this.minDate)
-    debugger
+  // *****
+  // TAB #3 logic
+  // *****
+  drop(event: CdkDragDrop<string[]>) {
+    if (event.previousContainer === event.container) {
+      moveItemInArray(event.container.data, event.previousIndex, event.currentIndex);
+    } else {
+      transferArrayItem(event.previousContainer.data,
+                        event.container.data,
+                        event.previousIndex,
+                        event.currentIndex);
+    }
   }
-
 
 }

@@ -11,13 +11,18 @@ import org.springframework.stereotype.Service;
 
 import unitbv.cantinaApp.payload.food.FoodRepresentation;
 import unitbv.cantinaApp.repository.FoodRepository;
+import unitbv.cantinaApp.repository.MenuRepository;
 import unitbv.cantinaApp.repository.entity.Food;
+import unitbv.cantinaApp.repository.entity.Menu;
 
 @Service
 public class FoodService {
 		
 	@Autowired
 	private FoodRepository foodRepository;
+	
+	@Autowired
+	private MenuRepository menuRepository;
 	
 	public Food createNewFood(String name, int weight, Double price, boolean active)
 	{
@@ -122,7 +127,23 @@ public class FoodService {
 		catch(Exception e) {
 			return false;
 		}
-		
+	}
+	
+	//TODO
+	//need to implement this 
+	public List<Food> GetAllMinusExistingForSelectedDay(String date){
+		List<Food> allFood = foodRepository.findAll();
+		List<Menu> foodFromMenu = menuRepository.findAllByDate(date);
+		Iterator<Menu> menuIterator = foodFromMenu.iterator();
+		List<Food> foodForSpecificDate = new ArrayList<Food>();
+		while(menuIterator.hasNext()) {
+			Menu menu = menuIterator.next();
+			Food food = foodRepository.findById(menu.getFood().getId()).get();
+			if(!allFood.contains(food)) {
+				foodForSpecificDate.add(food);
+			}
+		}
+		return foodForSpecificDate;
 	}
 	
 }
