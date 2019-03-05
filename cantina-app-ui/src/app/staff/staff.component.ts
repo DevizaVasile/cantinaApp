@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { Component, OnInit, ViewChild, ElementRef  } from '@angular/core';
 import { StaffService} from '../services/staff.service'
 
 import {FormGroup, FormBuilder} from '@angular/forms';
@@ -17,6 +17,8 @@ import {  MatDatepickerInputEvent} from '@angular/material'
 
 
 export class StaffComponent implements OnInit {
+
+  selectedTab:Number;
 
   allFood: Array<Object> = [];
   displayedColumns = ['name', 'weigth','price'];
@@ -37,10 +39,15 @@ export class StaffComponent implements OnInit {
   @ViewChild("paginator") paginator: MatPaginator;
   @ViewChild("paginator2") paginator2: MatPaginator;
 
+  @ViewChild('myId') myId: ElementRef;
+
   updateForm:FormGroup;
   createForm:FormGroup;
 
   constructor(private staffService: StaffService, private fb:FormBuilder, public snackBar: MatSnackBar) {
+
+    this.selectedTab = 0;
+
     this.updateForm = this.fb.group({
       name: ['',Validators.required],
       price: ['',[Validators.required,Validators.pattern(/^[.\d]+$/)]],
@@ -213,7 +220,12 @@ export class StaffComponent implements OnInit {
         this.getFutureWorkingDays();
       }
     )
-    
+  }
+
+  getDay(oEvent){
+    this.selectedTab=2;
+    // debugger
+   
   }
 
   
