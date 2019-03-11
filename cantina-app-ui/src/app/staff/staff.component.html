@@ -134,35 +134,36 @@
     </mat-tab>
   
 
-    <mat-tab disabled="true" label="Third"> Content 3    
-      <div class="d-flex justify-content-start">
-      </div>
+    <mat-tab disabled="true" label="Third"> 
       <div class="example-container">
-          <h2>To do</h2>
+          <h2>All food</h2>
         
           <div
             cdkDropList
             #todoList="cdkDropList"
-            [cdkDropListData]="this.allFood"
+            [cdkDropListData]="this.allFoodMinusSelected"
             [cdkDropListConnectedTo]="[doneList]"
             class="example-list"
             (cdkDropListDropped)="drop($event)">
-            <div class="example-box" *ngFor="let item of this.allFood" cdkDrag>{{item.name}}</div>
+            <div class="example-box" *ngFor="let item of this.allFoodMinusSelected" cdkDrag>{{item.name}}</div>
           </div>
         </div>
         
         <div class="example-container">
-          <h2>Done</h2>
+          <h2>{{this.day}}</h2>
         
           <div
             cdkDropList
             #doneList="cdkDropList"
-            [cdkDropListData]="done"
+            [cdkDropListData]="this.menuForTheDay"
             [cdkDropListConnectedTo]="[todoList]"
             class="example-list"
             (cdkDropListDropped)="drop($event)">
-            <div class="example-box" *ngFor="let item of done" cdkDrag>{{item.name}}</div>
+            <div class="example-box" *ngFor="let item of this.menuForTheDay" cdkDrag>{{item.name}}</div>
           </div>
+        </div>
+        <div>
+          <button mat-stroked-button color="primary" [disabled]="false" (click)="onSaveNewMenuState()">Update menu</button>
         </div>
     </mat-tab>
   </mat-tab-group>

@@ -13,7 +13,6 @@ import unitbv.cantinaApp.payload.food.FoodRepresentation;
 import unitbv.cantinaApp.repository.FoodRepository;
 import unitbv.cantinaApp.repository.MenuRepository;
 import unitbv.cantinaApp.repository.entity.Food;
-import unitbv.cantinaApp.repository.entity.Menu;
 
 @Service
 public class FoodService {
@@ -129,21 +128,28 @@ public class FoodService {
 		}
 	}
 	
-	//TODO
-	//need to implement this 
-	public List<Food> GetAllMinusExistingForSelectedDay(String date){
-		List<Food> allFood = foodRepository.findAll();
-		List<Menu> foodFromMenu = menuRepository.findAllByDate(date);
-		Iterator<Menu> menuIterator = foodFromMenu.iterator();
-		List<Food> foodForSpecificDate = new ArrayList<Food>();
-		while(menuIterator.hasNext()) {
-			Menu menu = menuIterator.next();
-			Food food = foodRepository.findById(menu.getFood().getId()).get();
-			if(!allFood.contains(food)) {
-				foodForSpecificDate.add(food);
+	public List<FoodRepresentation> getAllMinusExistingForSelectedDay(String date){
+		List<Food> allFood = foodRepository.findAll();		
+		Iterator<Food> allFoodIterator = allFood.iterator();
+		List<FoodRepresentation> foodForSpecificDate = new ArrayList<FoodRepresentation>();	
+		while(allFoodIterator.hasNext()) {
+			Food food = allFoodIterator.next();
+			menuRepository.findByFoodAndDate(food, date);
+			if(menuRepository.findByFoodAndDate(food, date).size()==0) {
+				foodForSpecificDate.add(convertToFoodRepresentation(food));
 			}
 		}
 		return foodForSpecificDate;
+	}
+	
+	private FoodRepresentation convertToFoodRepresentation(Food food) {
+		FoodRepresentation foodRepresentation = new FoodRepresentation();
+		foodRepresentation.setId(food.getId());
+		foodRepresentation.setName(food.getName());
+		foodRepresentation.setPrice(food.getPrice());
+		foodRepresentation.setVisible(food.getActive());
+		foodRepresentation.setWeigth(food.getWeight());
+		return foodRepresentation;
 	}
 	
 }

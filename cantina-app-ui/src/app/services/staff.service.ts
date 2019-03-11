@@ -9,6 +9,7 @@ import { throwError } from 'rxjs';
 })
 export class StaffService {
 
+  destination:String="'http://www.localhost:5000/api";
   constructor(private http: HttpClient) {
 
   }
@@ -32,7 +33,7 @@ export class StaffService {
   }
 
   createNewFood(payload:Object){
-    return this.http.post("http://www.localhost:5000/api/food/create/"+payload, {}).pipe(
+    return this.http.post("http://www.localhost:5000/api/food/create",payload).pipe(
       tap((res => res)),
       catchError(err => {
           return throwError(err.error.message)
@@ -64,6 +65,37 @@ export class StaffService {
       ); 
   }
 
+  getFoodNotInMenuForDay(payload:String){
+    return this.http.get("http://localhost:5000/api/menu/getFoodNotInMenuForDay/"+payload,{}).pipe(
+      tap( res => {}),
+      catchError(err => {
+         return throwError(err.error.message)})   
+      ); 
+  }
+
+  getMenuForDay(payload:String){
+    return this.http.get("http://localhost:5000/api/menu/getAll/"+payload,{}).pipe(
+      tap( res => {}),
+      catchError(err => {
+         return throwError(err.error.message)})   
+      ); 
+  }
+
+  updateMenuForTheDay(payload:MenuUpdate){
+    return this.http.post("http://localhost:5000/api/menu/update/"+payload.day,{"toAdd":payload.toAdd,"toRemove":payload.toRemove}).pipe(
+      tap(res => {},
+        catchError(err => {
+          return throwError(err.error.message)
+        }))
+    );
+  }
+
+}
+
+ interface MenuUpdate{
+  day:String;
+  toAdd:Array<Object>;
+  toRemove:Array<Object>;
 }
 
 

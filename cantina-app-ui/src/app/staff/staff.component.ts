@@ -21,10 +21,6 @@ import { debug } from 'util';
 export class StaffComponent implements OnInit {
 
   todo = [
-    'Get to work',
-    'Pick up groceries',
-    'Go home',
-    'Fall asleep'
   ];
 
   done = [
@@ -84,6 +80,8 @@ export class StaffComponent implements OnInit {
   ngOnInit() {
     this.getAllFood();
     this.getFutureWorkingDays();
+    this.getAllMenu("1969-12-12");
+    this.getAllFoodNotInMenuForDay("1969-12-12");
     this.dataSource.sort=this.sort;
     this.dataSource.paginator=this.paginator
     this.workingDayDataSource.paginator=this.paginator2
@@ -251,6 +249,9 @@ export class StaffComponent implements OnInit {
 
   getDay(oEvent){
     this.selectedTab=2;
+    this.getAllMenu(oEvent.day);
+    this.getAllFoodNotInMenuForDay(oEvent.day);
+    this.day=oEvent.day;
     // debugger
    
   }
@@ -258,6 +259,15 @@ export class StaffComponent implements OnInit {
   // *****
   // TAB #3 logic
   // *****
+
+  allFoodMinusSelected = [];
+  menuForTheDay = [];
+  day:String;
+
+  initialAllFoodMinusSelected = [];
+  initialMenuForTheDay = [];
+
+
   drop(event: CdkDragDrop<string[]>) {
     if (event.previousContainer === event.container) {
       moveItemInArray(event.container.data, event.previousIndex, event.currentIndex);
@@ -269,4 +279,60 @@ export class StaffComponent implements OnInit {
     }
   }
 
+  getAllMenu(day:String){
+    this.staffService.getMenuForDay(day).subscribe((res:FoodPayload) => {
+      this.menuForTheDay=res.food;
+      let x = JSON.stringify(res.food);
+      this.initialMenuForTheDay=JSON.parse(x);
+    })
+  }
+
+  getAllFoodNotInMenuForDay(day:String){
+    this.staffService.getFoodNotInMenuForDay(day).subscribe((res:Array<Object>) => {
+      this.allFoodMinusSelected=res;
+      let x= JSON.stringify(res);
+      this.initialAllFoodMinusSelected=JSON.parse(x);
+    })
+  }
+
+  onSaveNewMenuState(){
+    let toAdd = [];
+    let toRemove = [];
+    for(var i=0;i<this.menuForTheDay.length;i++){
+      let foodToCheck = this.menuForTheDay[i];
+      let result = this.initialMenuForTheDay.find( obj => { return obj.id === foodToCheck.id})
+      if(result===undefined){
+        toAdd.push(foodToCheck)
+      }
+    }
+
+    for(var i=0;i<this.allFoodMinusSelected.length;i++){
+      let foodToCheck = this.allFoodMinusSelected[i];
+      let result = this.initialAllFoodMinusSelected.find( obj => { return obj.id === foodToCheck.id})
+      if(result===undefined){
+        toRemove.push(foodToCheck);
+      }
+    }
+
+    this.staffService.updateMenuForTheDay({"day":this.day,"toAdd":toAdd,"toRemove":toRemove}).subscribe((res:any) => {
+        //TODO after call is done
+        if(res.success){
+          this.snackBar.open(res.message,"x",{duration:2000})
+          this.createForm.reset()
+          setTimeout( ()=>{this.getAllFood()},1000)
+        }
+        else{
+          this.snackBar.open("Error","x",{duration:2000})
+        }
+        this.getAllMenu(this.day);
+        this.getAllFoodNotInMenuForDay(this.day);
+
+    });
+  }
+  
+}
+
+ interface FoodPayload{
+  day:string;
+  food:Array<Object>
 }

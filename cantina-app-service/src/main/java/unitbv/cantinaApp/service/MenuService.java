@@ -53,4 +53,18 @@ public class MenuService {
 			return false;
 			}
 	}
+	
+	public boolean removeFoodFromMenu(String date, Long foodId) {
+		Optional<Food> food = foodRepository.findById(foodId);
+		if(food.isPresent()) {
+			for(Menu menu : menuRepository.findByFoodAndDate(food.get(), date)) {
+				menuRepository.delete(menu);
+			}
+//			foodRepository.deleteById(food.get().getId());
+			return true;
+		}
+		else {
+			return false;
+		}
+	}
 }
