@@ -3,20 +3,20 @@
 @import "~@angular/material/prebuilt-themes/indigo-pink.css";
 
 .small-font-size{
-    font-size: 12px;
+    font-size: 14px;
 }
 
 .example-container {
-    width: 400px;
+    width: 200px;
     max-width: 100%;
-    margin: 0 25px 25px 0;
+    margin: 0 15px 15px 0;
     display: inline-block;
     vertical-align: top;
   }
   
   .example-list {
     border: solid 1px #ccc;
-    min-height: 60px;
+    min-height: 40px;
     background: white;
     border-radius: 4px;
     overflow: hidden;
@@ -24,7 +24,7 @@
   }
   
   .example-box {
-    padding: 20px 10px;
+    padding: 10px 5px;
     border-bottom: solid 1px #ccc;
     color: rgba(0, 0, 0, 0.87);
     display: flex;

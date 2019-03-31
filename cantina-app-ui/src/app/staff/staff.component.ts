@@ -29,6 +29,7 @@ export class StaffComponent implements OnInit {
   selectedTab:Number;
 
   checkedActive:Boolean=false;
+  checkedActiveDay:Boolean=false;
 
   allFood: Array<Object> = [];
   displayedColumns = ['name', 'weigth','price','visible'];
@@ -252,8 +253,7 @@ export class StaffComponent implements OnInit {
     this.getAllMenu(oEvent.day);
     this.getAllFoodNotInMenuForDay(oEvent.day);
     this.day=oEvent.day;
-    // debugger
-   
+    this.checkedActiveDay=oEvent.visible;
   }
 
   // *****
@@ -329,6 +329,19 @@ export class StaffComponent implements OnInit {
 
     });
   }
+
+  updateActiveDay($event){
+    // this.checkedActiveDay=$event.active;
+    this.staffService.toggleDayActive(this.day).subscribe((res:any) => {
+      if(res.success){
+        this.snackBar.open(res.message,"x",{duration:2000})
+      }
+      else{
+        this.snackBar.open("Error","x",{duration:2000})
+      }
+      this.getFutureWorkingDays();
+    })
+  };
   
 }
 

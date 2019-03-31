@@ -90,6 +90,14 @@ export class StaffService {
     );
   }
 
+  toggleDayActive(payload:String){
+    return this.http.post("http://localhost:5000/api/workingDay/toggleActive/"+payload, {}).pipe(
+      tap( res => {}),
+      catchError(err => {
+         return throwError(err.error.message)})   
+      );
+  }
+
 }
 
  interface MenuUpdate{

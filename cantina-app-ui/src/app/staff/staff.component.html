@@ -69,7 +69,10 @@
           <!-- Price Active -->
           <ng-container matColumnDef="visible">
               <mat-header-cell *matHeaderCellDef mat-sort-header> Visible </mat-header-cell>
-              <mat-cell *matCellDef="let element"> {{element.visible}} </mat-cell>
+              <mat-cell *matCellDef="let element">
+                <img style="width:1.5rem" *ngIf="element.visible === false" src="../../assets/media/sharp_clear_black_36dp.png"> 
+                <img style="width:1.5rem" *ngIf="element.visible === true" src="../../assets/media/sharp_done_black_36dp.png"> 
+              </mat-cell>
               <!-- <mat-checkbox [checked]="element.visible" (change)="updateActiveFood($event)">Check me!</mat-checkbox> -->
             </ng-container>
         
@@ -105,7 +108,10 @@
                 <!-- Active Column -->
                 <ng-container matColumnDef="visible">
                   <mat-header-cell *matHeaderCellDef mat-sort-header> Active </mat-header-cell>
-                  <mat-cell *matCellDef="let element"> {{element.visible}} </mat-cell>
+                  <mat-cell *matCellDef="let element"> 
+                    <img style="width:1.5rem" *ngIf="element.visible === false" src="../../assets/media/sharp_clear_black_36dp.png"> 
+                    <img style="width:1.5rem" *ngIf="element.visible === true" src="../../assets/media/sharp_done_black_36dp.png"> 
+                  </mat-cell>
                 </ng-container>
                  
                 <mat-header-row *matHeaderRowDef="displayedWorkingDaysColumns"></mat-header-row>
@@ -134,10 +140,11 @@
     </mat-tab>
   
 
-    <mat-tab disabled="true" label="Third"> 
-      <div class="example-container">
+    <mat-tab disabled="true" label="Third">
+      <div class="d-flex justify-content-start">
+      <div class="border border-dark m-2 p-2 col-xl-4 col-lg-4 col-md-4" style="text-align: left;">
+        <div class="example-container">
           <h2>All food</h2>
-        
           <div
             cdkDropList
             #todoList="cdkDropList"
@@ -163,8 +170,13 @@
           </div>
         </div>
         <div>
+            <mat-checkbox [checked]="checkedActiveDay" (change)="updateActiveDay($event)">Active</mat-checkbox>
+        </div>
+        <div>
           <button mat-stroked-button color="primary" [disabled]="false" (click)="onSaveNewMenuState()">Update menu</button>
         </div>
+      </div>
+      </div>
     </mat-tab>
   </mat-tab-group>
 </div>
