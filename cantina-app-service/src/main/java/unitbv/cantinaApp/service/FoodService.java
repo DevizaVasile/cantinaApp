@@ -129,7 +129,7 @@ public class FoodService {
 	}
 	
 	public List<FoodRepresentation> getAllMinusExistingForSelectedDay(String date){
-		List<Food> allFood = foodRepository.findAll();		
+		List<Food> allFood = foodRepository.findByActiveTrue();		
 		Iterator<Food> allFoodIterator = allFood.iterator();
 		List<FoodRepresentation> foodForSpecificDate = new ArrayList<FoodRepresentation>();	
 		while(allFoodIterator.hasNext()) {
