@@ -7,6 +7,7 @@ import java.util.regex.Pattern;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import unitbv.cantinaApp.payload.user.UserProfile;
 import unitbv.cantinaApp.repository.RoleRepository;
 import unitbv.cantinaApp.repository.UserRepository;
 import unitbv.cantinaApp.repository.entity.Role;
@@ -121,6 +122,14 @@ public class UserService {
 		user.setBalance(result);
 		userRepository.save(user);
 		return result;
+	}
+	
+	public UserProfile getUserProfile(String email) {
+		Optional<User> user = userRepository.findByEmail(email);
+		if(user.isPresent()) {
+			return new UserProfile(user.get().getFirstName(),user.get().getLastName(),user.get().getBalance());
+		}
+		return null;
 	}
 	
 	

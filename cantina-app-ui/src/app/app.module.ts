@@ -30,7 +30,8 @@ import { UnauthorizedComponent } from './unauthorized/unauthorized.component';
 import { StaffComponent } from './staff/staff.component';
 import { UserComponent } from './user/user.component';
 import { AuthService } from './services/auth.service';
-import { StaffService } from './services/staff.service'
+import { StaffService } from './services/staff.service';
+import { UserService } from './services/user.service';
 
 
 @NgModule({
@@ -74,6 +75,7 @@ import { StaffService } from './services/staff.service'
     },
     AuthService,
     StaffService,
+    UserService,
     MatDatepickerModule
   ],
   bootstrap: [AppComponent]

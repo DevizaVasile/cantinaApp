@@ -10,6 +10,8 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -21,6 +23,7 @@ import unitbv.cantinaApp.payload.JwtAuthenticationResponse;
 import unitbv.cantinaApp.payload.user.ChangeRoleRequest;
 import unitbv.cantinaApp.payload.user.LoginRequest;
 import unitbv.cantinaApp.payload.user.SignUpRequest;
+import unitbv.cantinaApp.payload.user.UserProfile;
 import unitbv.cantinaApp.repository.RoleRepository;
 import unitbv.cantinaApp.repository.UserRepository;
 import unitbv.cantinaApp.repository.entity.Role;
@@ -127,5 +130,11 @@ public class AuthController {
     	{
     		return new ResponseEntity<>(new ApiResponse(result, "User does not exist or already have this role"), HttpStatus.METHOD_NOT_ALLOWED); 
     	}
+    }
+    
+    @GetMapping("/profile/{email}")
+    @PreAuthorize("hasRole('USER')")
+    public UserProfile getUserProfile(@PathVariable("email") String email){
+    	return userService.getUserProfile(email);
     }
 }
