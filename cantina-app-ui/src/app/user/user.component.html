@@ -2,11 +2,11 @@
     <mat-tab-group [(selectedIndex)]="selectedTabIndex">
         <mat-tab label="Home">
             <div class="row p-2 m-2">                
-                    <div class="col-sm-4 col-md-2 col-lg-2 col-xl-2">
+                    <div class="col-sm-4 col-md-3 col-lg-2 col-xl-2">
                         <p><b>{{fName}} {{lName}}</b></p>
                     </div>
-                    <div class="col-sm-4 col-md-2 col-lg-2 col-xl-2">
-                            <p><b>Current balance:{{balance}} RON</b></p>
+                    <div class="col-sm-5 col-md-2 col-lg-2 col-xl-2">
+                            <p>Sold:<b>{{balance}}</b> RON</p>
                         </div>
                     <div class="col-11">
                         <div class="col-sm-4 col-md-2 col-lg-2 col-xl-2">
@@ -38,6 +38,7 @@
                     <br>
                 </div>
                 <div class="border border-dark m-1 p-2 col-xl-6 col-lg-6 col-md-8 col-sm-11">
+                        <p>Menu</p>
                         <mat-table #table [dataSource]="foodList">
                         <!-- Name Column -->
                         <ng-container matColumnDef="name">
@@ -58,8 +59,36 @@
                         </ng-container>
 
                         <mat-header-row *matHeaderRowDef="displayedFoodColumns"></mat-header-row>
-                        <mat-row *matRowDef="let row; columns: displayedFoodColumns;" style="cursor: pointer;" (click)="getRecord(row)"></mat-row>
+                        <mat-row *matRowDef="let row; columns: displayedFoodColumns;" style="cursor: cell;" (click)="getRecord(row)"></mat-row>
                         </mat-table>
+                        <hr>
+                        <p>Selected</p>
+                        <mat-table #table2 [dataSource]="orderedFoodList">
+                        <!-- Name Column -->
+                        <ng-container matColumnDef="name">
+                            <mat-header-cell *matHeaderCellDef> Name </mat-header-cell>
+                            <mat-cell *matCellDef="let element"> {{element.name}} </mat-cell>
+                        </ng-container>
+                
+                        <!-- Weigth Column -->
+                        <ng-container matColumnDef="price">
+                            <mat-header-cell *matHeaderCellDef> price </mat-header-cell>
+                            <mat-cell *matCellDef="let element"> {{element.price}} RON</mat-cell>
+                        </ng-container>
+                
+                        <!-- Price Column -->
+                        <ng-container matColumnDef="quantity">
+                            <mat-header-cell *matHeaderCellDef> quantity </mat-header-cell>
+                            <mat-cell *matCellDef="let element"> {{element.quantity}} </mat-cell>
+                        </ng-container>
+
+                        <mat-header-row *matHeaderRowDef="orderedFoodColumns"></mat-header-row>
+                        <mat-row *matRowDef="let row; columns: orderedFoodColumns;" style="cursor: not-allowed;" (click)="deleteEntry(row)"></mat-row>
+                        </mat-table>
+                        
+                        <p>Total:{{sum}} RON</p>
+                        <p style="color:red" *ngIf="this.sum > this.balance ">Exceeded{{balance - sum}} RON</p>
+                        <button *ngIf="this.sum <= this.balance && this.sum > 0" >Continue</button>
                 </div>
             </div>
         </mat-tab>

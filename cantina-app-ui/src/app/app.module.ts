@@ -17,6 +17,8 @@ import {MatDatepickerModule} from '@angular/material/datepicker';
 import {MatNativeDateModule} from '@angular/material';
 import {DragDropModule} from '@angular/cdk/drag-drop';
 import {MatCheckboxModule} from '@angular/material/checkbox';
+import {MatListModule} from '@angular/material/list';
+import {MatGridListModule} from '@angular/material/grid-list';
 
 import { InterceptorService } from './services/interceptor.service';
 import { AppRoutingModule } from './app-routing.module';
@@ -65,7 +67,9 @@ import { UserService } from './services/user.service';
     MatDatepickerModule,
     MatNativeDateModule,
     DragDropModule,
-    MatCheckboxModule
+    MatCheckboxModule,
+    MatListModule,
+    MatGridListModule
   ],
   providers: [
     {

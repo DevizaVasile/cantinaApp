@@ -128,7 +128,7 @@ public class AuthController {
     	}
     	else
     	{
-    		return new ResponseEntity<>(new ApiResponse(result, "User does not exist or already have this role"), HttpStatus.METHOD_NOT_ALLOWED); 
+    		return new ResponseEntity<>(new ApiResponse(result, "User does not exist or   have this role"), HttpStatus.METHOD_NOT_ALLOWED); 
     	}
     }
     

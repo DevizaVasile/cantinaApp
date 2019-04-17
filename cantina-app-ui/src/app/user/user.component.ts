@@ -23,10 +23,18 @@ export class UserComponent implements OnInit {
   foodList = new MatTableDataSource(this.allFood);
   displayedFoodColumns = ['name', 'weigth','price'];
 
+  orderedFood:Array<Food> = [];
+  orderedFoodList = new MatTableDataSource(this.orderedFood);
+  orderedFoodColumns = ['name', 'price', 'quantity']
+
+  sum:number;
+
   constructor(private userService:UserService) { 
     this.selectedTabIndex=0;
     this.maxDate.setMonth(this.maxDate.getMonth()+1);
-    this.minDate.setDate(this.minDate.getDate()+1)
+    this.minDate.setDate(this.minDate.getDate()+1)   
+    this.sum=0; 
+
   }
 
   ngOnInit() {
@@ -57,6 +65,12 @@ export class UserComponent implements OnInit {
       this.allFood=[];
       res.food.forEach(obj => {this.allFood.push(obj)})
       this.foodList = new MatTableDataSource(this.allFood);
+
+      //clear all older selections
+      this.sum=0;
+      this.orderedFood=[];
+      this.orderedFoodList = new MatTableDataSource(this.orderedFood);
+      
     });
   }
 
@@ -66,6 +80,32 @@ export class UserComponent implements OnInit {
       this.fName=res.firstName;
       this.lName=res.lastName;
     });
+  }
+
+  getRecord(oEvent){
+    let result  = this.orderedFood.find( x=>x.id==oEvent.id);
+    if(result == undefined && result == null){
+      this.orderedFood.push({id:oEvent.id, name:oEvent.name, price:oEvent.price, quantity:1});
+      this.orderedFoodList = new MatTableDataSource(this.orderedFood);
+    } else {
+      result.quantity=result.quantity+1;
+    }
+    this.sum=this.sum+oEvent.price;
+    
+    
+  }
+
+  deleteEntry(oEvent){
+    let result  = this.orderedFood.find( x=>x.id==oEvent.id);
+    if(result.quantity === 1){
+      let index = this.orderedFood.indexOf(result);
+      this.orderedFood.splice(index,1);
+      this.orderedFoodList = new MatTableDataSource(this.orderedFood);
+    }
+    else{
+      result.quantity=result.quantity-1;
+    }
+    this.sum=this.sum-result.price;
   }
 
 }
@@ -79,4 +119,11 @@ interface UserProfile {
 interface FoodPayload{
   day:string;
   food:Array<Object>;
+}
+
+interface Food{
+  name:String;
+  price:number;
+  id:number;
+  quantity:number;
 }
