@@ -28,4 +28,10 @@ export class UserService {
          return throwError(err.error.message)})   
       ); 
   }
+
+  addNewOrder(payload:Object){
+    return this.http.post("http://localhost:5000/api/invoice/newInvoice",payload).pipe(
+      tap( res => res)
+    );
+  }
 }

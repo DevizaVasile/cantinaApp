@@ -88,7 +88,7 @@
                         
                         <p>Total:{{sum}} RON</p>
                         <p style="color:red" *ngIf="this.sum > this.balance ">Exceeded{{balance - sum}} RON</p>
-                        <button *ngIf="this.sum <= this.balance && this.sum > 0" >Continue</button>
+                        <button (click)="putNewOrder()" class="m-1" mat-raised-button color="primary" *ngIf="this.sum <= this.balance && this.sum > 0" >Continue</button>
                 </div>
             </div>
         </mat-tab>

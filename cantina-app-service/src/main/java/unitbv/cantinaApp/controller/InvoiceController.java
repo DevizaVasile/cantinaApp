@@ -1,8 +1,8 @@
 package unitbv.cantinaApp.controller;
 
+import java.math.BigDecimal;
 import java.text.ParseException;
 import java.util.List;
-
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -38,8 +38,9 @@ public class InvoiceController {
 	private ResponseEntity<?> createNewInvoice(@Valid @RequestBody NewInvoiceRequest newInvoiceRequest) throws ParseException {
 		java.util.Date day = util.TimeUtils.fromStringToDate(newInvoiceRequest.getDay());
 		if(invoiceService.isValidDay(util.TimeUtils.fromUtilDateToSqlDate(day))) {
-			invoiceService.createNewInvoice(userService.getUserByEmail(newInvoiceRequest.getEmail()),newInvoiceRequest.getDay());
-			return new ResponseEntity<>(new ApiResponse(true, "Invoice has been created or exists"),HttpStatus.ACCEPTED);
+			invoiceService.createNewInvoice(userService.getUserByEmail(newInvoiceRequest.getEmail()),newInvoiceRequest.getDay(),  
+					newInvoiceRequest.getOrder(), BigDecimal.valueOf(newInvoiceRequest.getSumRON()));			
+			return new ResponseEntity<>(new ApiResponse(true, "Invoice has been created or updated"),HttpStatus.ACCEPTED);
 		}
 		else {
 			return new ResponseEntity<>(new ApiResponse(true, "Selected day is not valid"),HttpStatus.BAD_REQUEST);
@@ -61,7 +62,7 @@ public class InvoiceController {
 	@PostMapping("/getAllInvoices")
 	private List<InvoiceRepresentation> getAllInvoices(@RequestBody InvoicesRequest request) throws ParseException{
 		User user = userService.getUserByEmail(request.getEmail());
-		return invoiceService.getAllPastInvoices(user);
+		return invoiceService.getAllInvoices(user);
 	}
 	
 	@PostMapping("/addFood/{invoiceId}")

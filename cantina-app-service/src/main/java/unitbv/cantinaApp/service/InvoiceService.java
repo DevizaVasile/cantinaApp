@@ -1,5 +1,6 @@
 package unitbv.cantinaApp.service;
 
+import java.math.BigDecimal;
 import java.sql.Date;
 import java.text.ParseException;
 import java.util.ArrayList;
@@ -38,7 +39,8 @@ public class InvoiceService {
 	@Autowired
 	FoodInvoiceRepository foodInvoiceRepository;
 	
-	public Invoice createNewInvoice(User user,String day) throws ParseException {
+	public Invoice createNewInvoice(User user,String day, List<OrderRepresentation> order, BigDecimal sumRON) throws ParseException {
+		Invoice returnInvoice;
 		if(!hasInvoiceForDay(user,day) ) {
 			Invoice invoice = new Invoice();
 			invoice.setUser(user);
@@ -46,11 +48,19 @@ public class InvoiceService {
 			invoice = invoiceRepository.save(invoice);
 			user.addInvoice(invoice);
 			userRepository.save(user);
-			return invoice;
+			returnInvoice =  invoice;
 		}
 		else {
-			return invoiceRepository.findByUserAndDay(user, day).get();
+			returnInvoice =  invoiceRepository.findByUserAndDay(user, day).get();
 		}
+		Iterator<OrderRepresentation> orderRepresentationIterator = order.iterator();
+		while(orderRepresentationIterator.hasNext()) {
+			OrderRepresentation orderRep = orderRepresentationIterator.next();
+			orderRep.setOrderId(returnInvoice.getId());
+		}
+		this.addFoodToInvoice(returnInvoice, order);
+		user.setBalance(user.getBalance().subtract(sumRON));
+		return invoiceRepository.save(returnInvoice);
 	}
 	
 	public List<InvoiceRepresentation> getAllFutureInvoices(User user) throws ParseException{
