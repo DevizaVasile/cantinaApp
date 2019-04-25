@@ -86,9 +86,21 @@
                         <mat-row *matRowDef="let row; columns: orderedFoodColumns;" style="cursor: not-allowed;" (click)="deleteEntry(row)"></mat-row>
                         </mat-table>
                         
-                        <p>Total:{{sum}} RON</p>
-                        <p style="color:red" *ngIf="this.sum > this.balance ">Exceeded{{balance - sum}} RON</p>
+                        
+                        
+                        <div class="row">
+                            <div class="col-4">
+                                <p>Balance: {{balance}}</p>
+                            </div>
+                            <div class="col-4">
+                                <p>Total:{{sum}} RON</p>
+                            </div>
+                            <div *ngIf="this.sum > this.balance " class="col-4">
+                                <p style="color:red" >Exceeded{{balance - sum}} RON</p>
+                            </div>
+                        </div>
                         <button (click)="putNewOrder()" class="m-1" mat-raised-button color="primary" *ngIf="this.sum <= this.balance && this.sum > 0" >Continue</button>
+                        <button (click)="openDialog()">Open</button>
                 </div>
             </div>
         </mat-tab>

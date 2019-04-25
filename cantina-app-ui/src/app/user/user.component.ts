@@ -1,8 +1,9 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Inject} from '@angular/core';
 import { UserService} from "../services/user.service";
 import {MatDatepickerInputEvent} from '@angular/material';
 import {MatTableDataSource,MatPaginator,MatSort} from '@angular/material';
 import {MatSnackBar} from '@angular/material';
+import {MatDialog, MatDialogRef, MAT_DIALOG_DATA} from '@angular/material';
 
 @Component({
   selector: 'app-user',
@@ -13,7 +14,7 @@ import {MatSnackBar} from '@angular/material';
 export class UserComponent implements OnInit {
 
   selectedTabIndex:Number;
-  balance:Number;
+  balance:number;
   fName:String;
   lName:String;
 
@@ -31,7 +32,7 @@ export class UserComponent implements OnInit {
   selectedDate:String;
   sum:number;
 
-  constructor(private userService:UserService, public snackBar: MatSnackBar) { 
+  constructor(private userService:UserService, public snackBar: MatSnackBar, public dialog: MatDialog) { 
     this.selectedTabIndex=0;
     this.maxDate.setMonth(this.maxDate.getMonth()+1);
     this.minDate.setDate(this.minDate.getDate()+1)   
@@ -109,17 +110,10 @@ export class UserComponent implements OnInit {
 
   putNewOrder(){
     let payload = {
-      // "sumRON":this.sum,
-      // "email":localStorage.getItem("email"),
-      // "order":this._getFoodIdAndQuantityFromOrderedItems(this.orderedFood),
-      // "day":this.selectedDate
-      "email":"vasile.deviza@gmail.com",
-	    "day":"2019-04-22",
-      "sumRON":10.50,
-      "order":[{
-        "foodId": 8,
-        "quantity":1
-      }]
+      "sumRON":this.sum,
+      "email":localStorage.getItem("email"),
+      "order":this._getFoodIdAndQuantityFromOrderedItems(this.orderedFood),
+      "day":this.selectedDate
     };
     this.userService.addNewOrder(payload).subscribe( 
       (response:any) => {
@@ -138,6 +132,7 @@ export class UserComponent implements OnInit {
   }
 
   _cleanUp(){
+    this.balance=this.balance-this.sum;
     this.sum=0;
     this.orderedFood=[];
     this.orderedFoodList = new MatTableDataSource(this.orderedFood);
@@ -151,10 +146,16 @@ export class UserComponent implements OnInit {
     return order;
   }
 
+  openDialog(): void {
+    const dialogRef = this.dialog.open(DialogOverviewExampleDialog, {
+      width: '250px'
+    });
+  }
+
 }
 
 interface UserProfile {
-  balance:Number;
+  balance:number;
   firstName:String;
   lastName:String;
 }
@@ -169,4 +170,29 @@ interface Food{
   price:number;
   id:number;
   quantity:number;
+}
+
+@Component({
+  selector: 'dialog-overview-example-dialog',
+  template: `
+              <p>Are you usere you want to place the order?</p>
+              <button  mat-button class="m-1 p-1" (click)="onYesClick()">Yes</button> 
+              <button  mat-button class="m-1 p-1" (click)="onNoClick()">No Thanks</button>
+             `
+})
+export class DialogOverviewExampleDialog {
+
+  constructor(
+    public dialogRef: MatDialogRef<DialogOverviewExampleDialog>,
+    @Inject(MAT_DIALOG_DATA) public data: DialogData) {}
+
+  onNoClick(): void {
+    this.dialogRef.disableClose=true;
+    this.dialogRef.close();
+  }
+}
+
+interface DialogData {
+  animal: string;
+  name: string;
 }

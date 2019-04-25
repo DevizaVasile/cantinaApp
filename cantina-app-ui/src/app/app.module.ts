@@ -19,6 +19,7 @@ import {DragDropModule} from '@angular/cdk/drag-drop';
 import {MatCheckboxModule} from '@angular/material/checkbox';
 import {MatListModule} from '@angular/material/list';
 import {MatGridListModule} from '@angular/material/grid-list';
+import {MatDialogModule} from '@angular/material/dialog';
 
 import { InterceptorService } from './services/interceptor.service';
 import { AppRoutingModule } from './app-routing.module';
@@ -34,6 +35,8 @@ import { UserComponent } from './user/user.component';
 import { AuthService } from './services/auth.service';
 import { StaffService } from './services/staff.service';
 import { UserService } from './services/user.service';
+import { DialogOverviewExampleDialog} from './user/user.component'
+import { from } from 'rxjs';
 
 
 @NgModule({
@@ -46,7 +49,8 @@ import { UserService } from './services/user.service';
     AdminComponent,
     UnauthorizedComponent,
     StaffComponent,
-    UserComponent
+    UserComponent,
+    DialogOverviewExampleDialog
   ],
   imports: [
     FormsModule,
@@ -69,7 +73,8 @@ import { UserService } from './services/user.service';
     DragDropModule,
     MatCheckboxModule,
     MatListModule,
-    MatGridListModule
+    MatGridListModule,
+    MatDialogModule
   ],
   providers: [
     {
@@ -82,6 +87,7 @@ import { UserService } from './services/user.service';
     UserService,
     MatDatepickerModule
   ],
-  bootstrap: [AppComponent]
+  bootstrap: [AppComponent],
+  entryComponents:[DialogOverviewExampleDialog]
 })
 export class AppModule { }
