@@ -37,9 +37,18 @@ export class UserService {
 
   getFutureInvoices(payload:Object){
     return this.http.post("http://localhost:5000/api/invoice/getFutureInvoices",payload).pipe(
-      tap( res => {}),
+      tap( res => {
+      }),
       catchError(err => {
         return throwError(err.error.message)})   
+    );
+  }
+
+  getPastInvoices(payload:Object){
+    return this.http.post("http://localhost:5000/api/invoice/getPastInvoices",payload).pipe(
+      tap( res => {}),
+      catchError(err => {
+        return throwError(err.error.message)})
     );
   }
 
@@ -47,7 +56,6 @@ export class UserService {
     return this.http.get("http://localhost:5000/api/invoice/getInvoiceFoodForDay/"+day+"/"+userId,{}).pipe(
       tap( res => {}),
       catchError(err => {
-        debugger
         return throwError(err.error.message)})   
     );
   }

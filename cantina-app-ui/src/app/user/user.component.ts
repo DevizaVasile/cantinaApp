@@ -34,6 +34,7 @@ export class UserComponent implements OnInit {
 
   futureInvoices:Array<any>;
   viewOrder:Array<any>;
+  viewOrderDate:String;
 
   constructor(private userService:UserService, public snackBar: MatSnackBar, public dialog: MatDialog) { 
     this.selectedTabIndex=0;
@@ -41,6 +42,7 @@ export class UserComponent implements OnInit {
     this.minDate.setDate(this.minDate.getDate()+1)   
     this.sum=0;
     this.viewOrder = [];
+    this.viewOrderDate = "1969";
 
   }
 
@@ -176,6 +178,7 @@ export class UserComponent implements OnInit {
     this.userService.getOrderForDay(item,localStorage.getItem("email")).subscribe( (res:Array<any>) =>{
       console.log(res)
       this.viewOrder=res;
+      this.viewOrderDate=item;
       this.selectedTabIndex=2;
     });
   }

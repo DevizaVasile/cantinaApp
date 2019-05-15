@@ -1,3 +1,20 @@
-<p>
-  user-history works!
-</p>
+<div class="content">
+    <mat-tab-group [(selectedIndex)]="selectedTabIndex">
+        <mat-tab label="Home">
+            <div class="row p-2 m-2">
+                <div class="border border-dark m-1 p-2 col-xl-6 col-lg-6 col-md-8 col-sm-11"> 
+                    <p>Past orders</p>
+                    <mat-table #table [dataSource]="pastInvoicesDataSource">
+                    <!-- Date Column -->
+                    <ng-container matColumnDef="day">
+                        <mat-header-cell *matHeaderCellDef> Date </mat-header-cell>
+                        <mat-cell *matCellDef="let element"> {{element.day}}</mat-cell>
+                    </ng-container>
+                    <mat-header-row *matHeaderRowDef="pastInvoicesColumns"></mat-header-row>
+                    <mat-row *matRowDef="let row; columns: pastInvoicesColumns;"></mat-row>
+                    </mat-table>
+                </div>
+            </div>
+        </mat-tab>
+    </mat-tab-group>
+</div>
