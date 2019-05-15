@@ -32,6 +32,8 @@ export class UserComponent implements OnInit {
   selectedDate:String;
   sum:number;
 
+  futureInvoices:Array<any>;
+
   constructor(private userService:UserService, public snackBar: MatSnackBar, public dialog: MatDialog) { 
     this.selectedTabIndex=0;
     this.maxDate.setMonth(this.maxDate.getMonth()+1);
@@ -42,6 +44,7 @@ export class UserComponent implements OnInit {
 
   ngOnInit() {
     this.getUserProfile();
+    this.getFutureInvoice();
   }
 
   onNewOrderPress(){
@@ -150,6 +153,25 @@ export class UserComponent implements OnInit {
     const dialogRef = this.dialog.open(DialogOverviewExampleDialog, {
       width: '250px'
     });
+
+    dialogRef.afterClosed().subscribe( result => {
+      if(result){
+        this.putNewOrder();
+      }
+    })
+  }
+
+  getFutureInvoice(){
+    this.futureInvoices = [];
+    this.userService.getFutureInvoices({"email":localStorage.getItem("email")}).subscribe( (res:Array<FutureInvoices> )=>{
+      res.forEach( item => {
+        this.futureInvoices.push(item.day);
+      })
+    })
+  }
+
+  onFutureDayItemClick(event, item){
+    
   }
 
 }
@@ -165,6 +187,11 @@ interface FoodPayload{
   food:Array<Object>;
 }
 
+interface FutureInvoices{
+  day:string;
+  email:string;
+}
+
 interface Food{
   name:String;
   price:number;
@@ -176,23 +203,23 @@ interface Food{
   selector: 'dialog-overview-example-dialog',
   template: `
               <p>Are you usere you want to place the order?</p>
-              <button  mat-button class="m-1 p-1" (click)="onYesClick()">Yes</button> 
-              <button  mat-button class="m-1 p-1" (click)="onNoClick()">No Thanks</button>
+              <button  mat-raised-button class="m-1 p-1" (click)="onYesClick()">Yes</button> 
+              <button  mat-raised-button class="m-1 p-1" (click)="onNoClick()">No Thanks</button>
              `
 })
 export class DialogOverviewExampleDialog {
 
   constructor(
-    public dialogRef: MatDialogRef<DialogOverviewExampleDialog>,
-    @Inject(MAT_DIALOG_DATA) public data: DialogData) {}
+    public dialogRef: MatDialogRef<DialogOverviewExampleDialog>) {
+
+    }
 
   onNoClick(): void {
     this.dialogRef.disableClose=true;
-    this.dialogRef.close();
+    this.dialogRef.close(false);
   }
-}
 
-interface DialogData {
-  animal: string;
-  name: string;
+  onYesClick(): void {
+    this.dialogRef.close(true);
+  }
 }

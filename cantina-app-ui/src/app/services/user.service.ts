@@ -34,4 +34,12 @@ export class UserService {
       tap( res => res)
     );
   }
+
+  getFutureInvoices(payload:Object){
+    return this.http.post("http://localhost:5000/api/invoice/getFutureInvoices",payload).pipe(
+      tap( res => {}),
+      catchError(err => {
+        return throwError(err.error.message)})   
+    );
+  }
 }

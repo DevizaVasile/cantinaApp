@@ -3,88 +3,91 @@
         <mat-tab label="Home">
             <div class="row p-2 m-2">                
                     <div class="col-sm-4 col-md-3 col-lg-2 col-xl-2">
-                        <p><b>{{fName}} {{lName}}</b></p>
+                        <p><strong>{{fName}} {{lName}}</strong></p>
                     </div>
                     <div class="col-sm-5 col-md-2 col-lg-2 col-xl-2">
-                            <p>Sold:<b>{{balance}}</b> RON</p>
+                            <p>Sold:<strong>{{balance}}</strong> RON</p>
                         </div>
                     <div class="col-11">
                         <div class="col-sm-4 col-md-2 col-lg-2 col-xl-2">
                             <button class="m-1" mat-raised-button color="primary" (click)="onNewOrderPress()">Comanda noua</button>
                         </div>
                     </div> 
-                <div class="col-11" style="background-color:blue;">
-                    <div class="col-sm-4 col-md-2 col-lg-2 col-xl-2">
-                            <p><b>Comenzi viiotare</b></p>
+                <div class="col-11 p-2 m-2">
+                    <div class="col-sm-4 col-md-4 col-lg-4 col-xl-4">
+                        <div>
+                            <p><strong>Comenzi viiotare</strong></p>
+                        </div>
+                        <ul class="list-group">
+                            <li (click)="onFutureDayItemClick($event, item)"
+                                class="list-group-item" *ngFor="let item of this.futureInvoices">
+                                    {{item}}
+                            </li>
+                        </ul>
                      </div>
-                </div> 
-                <div class="col-11" style="background-color:black;">
-                    <div class="col-sm-4 col-md-2 col-lg-2 col-xl-2">
-                            <p><b>Comenzi trecut </b></p>
-                    </div>
-                </div>           
+                </div>     
             </div>
         </mat-tab>
 
         <mat-tab  label="New Order">
             <div class="row p-2 m-2">
-                <div class="border border-dark m-1 p-1 col-xl-3 col-lg-3 col-md-4 col-sm-6">
-                    <mat-form-field>
+                <div class="border border-dark m-1 p-2 col-xl-6 col-lg-6 col-md-8 col-sm-11">
+                    <p>Day</p>
+                    <mat-form-field class="border border-dark m-1 p-1">
                         <input [min]="minDate" [max]="maxDate" matInput [matDatepickerFilter]="dayFilter"  disabled="true"
                             [matDatepicker]="picker" placeholder="Choose a date" (dateInput)="calendarSelectionChange('input', $event)">
                         <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
-                        <mat-datepicker disabled="false" #picker></mat-datepicker>
+                            <mat-datepicker disabled="false" #picker></mat-datepicker>
                     </mat-form-field>
                     <br>
-                </div>
-                <div class="border border-dark m-1 p-2 col-xl-6 col-lg-6 col-md-8 col-sm-11">
-                        <p>Menu</p>
-                        <mat-table #table [dataSource]="foodList">
-                        <!-- Name Column -->
-                        <ng-container matColumnDef="name">
-                            <mat-header-cell *matHeaderCellDef> Name </mat-header-cell>
-                            <mat-cell *matCellDef="let element"> {{element.name}} </mat-cell>
-                        </ng-container>
-                
-                        <!-- Weigth Column -->
-                        <ng-container matColumnDef="weigth">
-                            <mat-header-cell *matHeaderCellDef> Weigth </mat-header-cell>
-                            <mat-cell *matCellDef="let element"> {{element.weigth}} </mat-cell>
-                        </ng-container>
-                
-                        <!-- Price Column -->
-                        <ng-container matColumnDef="price">
-                            <mat-header-cell *matHeaderCellDef> Price </mat-header-cell>
-                            <mat-cell *matCellDef="let element"> {{element.price}} </mat-cell>
-                        </ng-container>
+                        
+                    <p>Menu</p>
+                    <mat-table #table [dataSource]="foodList">
+                    <!-- Name Column -->
+                    <ng-container matColumnDef="name">
+                        <mat-header-cell *matHeaderCellDef> Name </mat-header-cell>
+                        <mat-cell *matCellDef="let element"> {{element.name}} </mat-cell>
+                    </ng-container>
+            
+                    <!-- Weigth Column -->
+                    <ng-container matColumnDef="weigth">
+                        <mat-header-cell *matHeaderCellDef> Weigth </mat-header-cell>
+                        <mat-cell *matCellDef="let element"> {{element.weigth}} </mat-cell>
+                    </ng-container>
+            
+                    <!-- Price Column -->
+                    <ng-container matColumnDef="price">
+                        <mat-header-cell *matHeaderCellDef> Price </mat-header-cell>
+                        <mat-cell *matCellDef="let element"> {{element.price}} </mat-cell>
+                    </ng-container>
 
-                        <mat-header-row *matHeaderRowDef="displayedFoodColumns"></mat-header-row>
-                        <mat-row *matRowDef="let row; columns: displayedFoodColumns;" style="cursor: cell;" (click)="getRecord(row)"></mat-row>
-                        </mat-table>
-                        <hr>
-                        <p>Selected</p>
-                        <mat-table #table2 [dataSource]="orderedFoodList">
-                        <!-- Name Column -->
-                        <ng-container matColumnDef="name">
-                            <mat-header-cell *matHeaderCellDef> Name </mat-header-cell>
-                            <mat-cell *matCellDef="let element"> {{element.name}} </mat-cell>
-                        </ng-container>
-                
-                        <!-- Weigth Column -->
-                        <ng-container matColumnDef="price">
-                            <mat-header-cell *matHeaderCellDef> price </mat-header-cell>
-                            <mat-cell *matCellDef="let element"> {{element.price}} RON</mat-cell>
-                        </ng-container>
-                
-                        <!-- Price Column -->
-                        <ng-container matColumnDef="quantity">
-                            <mat-header-cell *matHeaderCellDef> quantity </mat-header-cell>
-                            <mat-cell *matCellDef="let element"> {{element.quantity}} </mat-cell>
-                        </ng-container>
+                    <mat-header-row *matHeaderRowDef="displayedFoodColumns"></mat-header-row>
+                    <mat-row *matRowDef="let row; columns: displayedFoodColumns;" style="cursor: cell;" (click)="getRecord(row)"></mat-row>
+                    </mat-table>
+                    <hr>
+                    <p>Selected</p>
+                    <mat-table #table2 [dataSource]="orderedFoodList">
+                    <!-- Name Column -->
+                    <ng-container matColumnDef="name">
+                        <mat-header-cell *matHeaderCellDef> Name </mat-header-cell>
+                        <mat-cell *matCellDef="let element"> {{element.name}} </mat-cell>
+                    </ng-container>
+            
+                    <!-- Weigth Column -->
+                    <ng-container matColumnDef="price">
+                        <mat-header-cell *matHeaderCellDef> price </mat-header-cell>
+                        <mat-cell *matCellDef="let element"> {{element.price}} RON</mat-cell>
+                    </ng-container>
+            
+                    <!-- Price Column -->
+                    <ng-container matColumnDef="quantity">
+                        <mat-header-cell *matHeaderCellDef> quantity </mat-header-cell>
+                        <mat-cell *matCellDef="let element"> {{element.quantity}} </mat-cell>
+                    </ng-container>
 
-                        <mat-header-row *matHeaderRowDef="orderedFoodColumns"></mat-header-row>
-                        <mat-row *matRowDef="let row; columns: orderedFoodColumns;" style="cursor: not-allowed;" (click)="deleteEntry(row)"></mat-row>
-                        </mat-table>
+                    <mat-header-row *matHeaderRowDef="orderedFoodColumns"></mat-header-row>
+                    <mat-row *matRowDef="let row; columns: orderedFoodColumns;" style="cursor: not-allowed;" (click)="deleteEntry(row)"></mat-row>
+                    </mat-table>
                         
                         
                         
@@ -99,8 +102,11 @@
                                 <p style="color:red" >Exceeded{{balance - sum}} RON</p>
                             </div>
                         </div>
-                        <button (click)="putNewOrder()" class="m-1" mat-raised-button color="primary" *ngIf="this.sum <= this.balance && this.sum > 0" >Continue</button>
-                        <button (click)="openDialog()">Open</button>
+                        <button (click)="openDialog()" class="m-1" 
+                            mat-raised-button color="primary" 
+                            *ngIf="this.sum <= this.balance && this.sum > 0" >
+                            Continue
+                        </button>
                 </div>
             </div>
         </mat-tab>
