@@ -10,7 +10,7 @@
                         </div>
                     <div class="col-11">
                         <div class="col-sm-4 col-md-2 col-lg-2 col-xl-2">
-                            <button class="m-1" mat-raised-button color="primary" (click)="onNewOrderPress()">Comanda noua</button>
+                            <button class="m-1" mat-raised-button color="primary" (click)="onNewOrderPress()">New Order</button>
                         </div>
                     </div> 
                 <div class="col-11 p-2 m-2">
@@ -87,10 +87,7 @@
 
                     <mat-header-row *matHeaderRowDef="orderedFoodColumns"></mat-header-row>
                     <mat-row *matRowDef="let row; columns: orderedFoodColumns;" style="cursor: not-allowed;" (click)="deleteEntry(row)"></mat-row>
-                    </mat-table>
-                        
-                        
-                        
+                    </mat-table>    
                         <div class="row">
                             <div class="col-4">
                                 <p>Balance: {{balance}}</p>
@@ -111,7 +108,21 @@
             </div>
         </mat-tab>
 
-        <mat-tab  label="History">
+        <mat-tab disabled label="View Order">
+            <div class="row p-2 m-2">
+                <div class="border border-dark m-1 p-2 col-xl-4 col-lg-4 col-md-4 col-sm-11">
+                    <table class="table">
+                        <tr>
+                            <th>Name</th>
+                            <th>Quantity</th>
+                        </tr>
+                        <tr *ngFor="let item of this.viewOrder">
+                            <td>{{item.foodName}}</td>
+                            <td>{{item.quantity}}</td>
+                        </tr>
+                    </table>
+                </div>
+            </div>
         </mat-tab>
     </mat-tab-group>
 </div>

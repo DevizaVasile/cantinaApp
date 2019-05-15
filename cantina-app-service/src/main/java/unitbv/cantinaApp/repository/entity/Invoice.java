@@ -28,6 +28,9 @@ public class Invoice {
 	@Column(name="day")
 	private String day;
 	
+	@Column(name="processed")
+	private boolean processed;
+	
 	@OneToMany(mappedBy="invoice",  fetch = FetchType.EAGER, cascade=CascadeType.MERGE)
 	private List<InvoiceFood> invoiceFood;
 	
@@ -113,6 +116,14 @@ public class Invoice {
 		this.day = day;
 	}
 	
+	public boolean getProcessed() {
+		return this.processed;
+	}
+
+	public void setProcessed(boolean processed) {
+		this.processed = processed;
+	}
+
 	private boolean hasFood(Food food) {
 		boolean hasFood=false;
 		if(this.invoiceFood != null) {

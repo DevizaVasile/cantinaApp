@@ -33,12 +33,14 @@ export class UserComponent implements OnInit {
   sum:number;
 
   futureInvoices:Array<any>;
+  viewOrder:Array<any>;
 
   constructor(private userService:UserService, public snackBar: MatSnackBar, public dialog: MatDialog) { 
     this.selectedTabIndex=0;
     this.maxDate.setMonth(this.maxDate.getMonth()+1);
     this.minDate.setDate(this.minDate.getDate()+1)   
-    this.sum=0; 
+    this.sum=0;
+    this.viewOrder = [];
 
   }
 
@@ -171,7 +173,11 @@ export class UserComponent implements OnInit {
   }
 
   onFutureDayItemClick(event, item){
-    
+    this.userService.getOrderForDay(item,localStorage.getItem("email")).subscribe( (res:Array<any>) =>{
+      console.log(res)
+      this.viewOrder=res;
+      this.selectedTabIndex=2;
+    });
   }
 
 }

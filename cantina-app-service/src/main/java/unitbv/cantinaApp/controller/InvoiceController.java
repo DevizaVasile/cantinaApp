@@ -13,6 +13,8 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import unitbv.cantinaApp.payload.ApiResponse;
@@ -20,6 +22,7 @@ import unitbv.cantinaApp.payload.invoice.InvoiceRepresentation;
 import unitbv.cantinaApp.payload.invoice.InvoicesRequest;
 import unitbv.cantinaApp.payload.invoice.NewInvoiceRequest;
 import unitbv.cantinaApp.payload.order.OrderRepresentation;
+import unitbv.cantinaApp.payload.order.OrderView;
 import unitbv.cantinaApp.repository.entity.Invoice;
 import unitbv.cantinaApp.repository.entity.User;
 import unitbv.cantinaApp.service.InvoiceService;
@@ -66,20 +69,28 @@ public class InvoiceController {
 		return invoiceService.getAllInvoices(user);
 	}
 	
-	@PostMapping("/addFood/{invoiceId}")
-	private void addFoodToInvoice(@PathVariable("invoiceId") long invoiceId, @RequestBody List<OrderRepresentation> orderRepresentationList) {
-		Invoice invoice = invoiceService.getInvoiceById(invoiceId);
-		invoiceService.addFoodToInvoice(invoice, orderRepresentationList);
-	}
+//	@PostMapping("/addFood/{invoiceId}")
+//	private void addFoodToInvoice(@PathVariable("invoiceId") long invoiceId, @RequestBody List<OrderRepresentation> orderRepresentationList) {
+//		Invoice invoice = invoiceService.getInvoiceById(invoiceId);
+//		invoiceService.addFoodToInvoice(invoice, orderRepresentationList);
+//	}
+//	
+//	@PostMapping("/removeFood/{invoiceId}")
+//	private void removeFoodToInvoice(@PathVariable("invoiceId") long invoiceId, @RequestBody List<OrderRepresentation> orderRepresentationList) {
+//		Invoice invoice = invoiceService.getInvoiceById(invoiceId);
+//		invoiceService.removeFoodFromInvoice(invoice, orderRepresentationList);
+//	}
 	
-	@PostMapping("/removeFood/{invoiceId}")
-	private void removeFoodToInvoice(@PathVariable("invoiceId") long invoiceId, @RequestBody List<OrderRepresentation> orderRepresentationList) {
-		Invoice invoice = invoiceService.getInvoiceById(invoiceId);
-		invoiceService.removeFoodFromInvoice(invoice, orderRepresentationList);
-	}
+//	@GetMapping("/getInvoiceFoodForDay/{day}")
+//	private List<OrderView> getInvoiceFoodForDay(@PathVariable("day") String day){
+//		return invoiceService.getOrderRepresentation(user, day);
+//	}
 	
-	@GetMapping("/getInvoiceFoodForDay/{day}")
-	private void getInvoiceFoodForDay(@PathVariable("invoiceId") String day){
-		
+	@RequestMapping(value = "/getInvoiceFoodForDay/{day}/{userId}")
+	@ResponseBody
+	public List<OrderView> getInvoiceFoodForDay(
+			@PathVariable("day") String day,
+			@PathVariable("userId") String userId) {
+		return invoiceService.getOrderRepresentation(userService.getUserByEmail(userId), day);
 	}
 }

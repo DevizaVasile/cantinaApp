@@ -37,6 +37,7 @@ import { StaffService } from './services/staff.service';
 import { UserService } from './services/user.service';
 import { DialogOverviewExampleDialog} from './user/user.component'
 import { from } from 'rxjs';
+import { UserHistoryComponent } from './user-history/user-history.component';
 
 
 @NgModule({
@@ -50,7 +51,8 @@ import { from } from 'rxjs';
     UnauthorizedComponent,
     StaffComponent,
     UserComponent,
-    DialogOverviewExampleDialog
+    DialogOverviewExampleDialog,
+    UserHistoryComponent
   ],
   imports: [
     FormsModule,

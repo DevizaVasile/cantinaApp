@@ -7,6 +7,7 @@ import { AdminComponent} from './admin/admin.component';
 import { UnauthorizedComponent } from './unauthorized/unauthorized.component';
 import { StaffComponent } from './staff/staff.component'
 import { UserComponent } from './user/user.component';
+import { UserHistoryComponent } from './user-history/user-history.component' 
 
 const routes: Routes = [
   {path: 'login', component: LoginComponent},
@@ -14,6 +15,7 @@ const routes: Routes = [
   {path: 'admin', component: AdminComponent, canActivate:[RoleGuardService], data:{expectedRole: "ROLE_ADMIN"}},
   {path: 'staff', component: StaffComponent, canActivate:[RoleGuardService], data:{expectedRole: "ROLE_STAFF"}},
   {path: 'user', component: UserComponent, canActivate:[RoleGuardService], data:{expectedRole: "ROLE_USER"}},
+  {path: 'user/history', component: UserHistoryComponent, canActivate:[RoleGuardService], data:{expectedRole: "ROLE_USER"}},
   {path: 'unauthorized', component: UnauthorizedComponent}
 ];
 

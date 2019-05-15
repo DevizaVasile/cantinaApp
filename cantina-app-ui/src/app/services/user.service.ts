@@ -42,4 +42,14 @@ export class UserService {
         return throwError(err.error.message)})   
     );
   }
+
+  getOrderForDay(day:String, userId:String){
+    return this.http.get("http://localhost:5000/api/invoice/getInvoiceFoodForDay/"+day+"/"+userId,{}).pipe(
+      tap( res => {}),
+      catchError(err => {
+        debugger
+        return throwError(err.error.message)})   
+    );
+  }
+
 }

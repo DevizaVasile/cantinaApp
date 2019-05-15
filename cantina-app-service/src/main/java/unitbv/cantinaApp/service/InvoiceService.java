@@ -13,6 +13,7 @@ import org.springframework.stereotype.Service;
 
 import unitbv.cantinaApp.payload.invoice.InvoiceRepresentation;
 import unitbv.cantinaApp.payload.order.OrderRepresentation;
+import unitbv.cantinaApp.payload.order.OrderView;
 import unitbv.cantinaApp.repository.FoodInvoiceRepository;
 import unitbv.cantinaApp.repository.FoodRepository;
 import unitbv.cantinaApp.repository.InvoiceRepository;
@@ -45,6 +46,7 @@ public class InvoiceService {
 			Invoice invoice = new Invoice();
 			invoice.setUser(user);
 			invoice.setDay(day.toString());
+			invoice.setProcessed(false);
 			invoice = invoiceRepository.save(invoice);
 			user.addInvoice(invoice);
 			userRepository.save(user);
@@ -162,6 +164,28 @@ public class InvoiceService {
 		while(iterator.hasNext()) {
 			foodInvoiceRepository.delete(iterator.next());
 		}
+	}
+	
+	public List<OrderView> getOrderRepresentation(User user, String day){
+		Optional<Invoice> optionalInvoice = invoiceRepository.findByUserAndDay(user, day);
+		if(optionalInvoice.isPresent()) {
+			Invoice invoice = optionalInvoice.get();
+			List<InvoiceFood> invoiceFood = invoice.getFood();
+			return this.getFoodRepresentationFromInvocieFood(invoiceFood);
+		}
+		return new ArrayList<OrderView>();
+		
+	}
+	
+	private List<OrderView> getFoodRepresentationFromInvocieFood(List<InvoiceFood> invoiceFood) {
+		List<OrderView> orderView = new ArrayList<OrderView>();
+		
+		Iterator<InvoiceFood> invoiceFoodIterator =  invoiceFood.iterator();
+		while(invoiceFoodIterator.hasNext()) {
+			InvoiceFood invoiceFoodElement = invoiceFoodIterator.next();	
+			orderView.add(new OrderView(invoiceFoodElement.getQuantity(),invoiceFoodElement.getFood().getName()));
+		}
+		return orderView;
 	}
 	
 	
