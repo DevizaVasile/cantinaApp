@@ -1,9 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import {MatTableDataSource,MatPaginator,MatSort} from '@angular/material';
-
+import { Router } from '@angular/router';
 
 import { UserService } from '../services/user.service'
-import { debug } from 'util';
+
 
 
 @Component({
@@ -17,10 +17,16 @@ export class UserHistoryComponent implements OnInit {
 
   pastInvoices:Array<Object>;
   pastInvoicesDataSource = new MatTableDataSource(this.pastInvoices);
-  pastInvoicesColumns = ['day'];
+  pastInvoicesColumns = ['day', 'report'];
 
-  constructor(private userService:UserService,) {
+  viewOrder:Array<any>;
+  viewOrderDate:String;
+  
+  constructor(private userService:UserService, private router:Router) {
     this.selectedTabIndex=0;
+
+    this.viewOrder = [];
+    this.viewOrderDate = "1969";
    }
 
   ngOnInit() {
@@ -33,9 +39,20 @@ export class UserHistoryComponent implements OnInit {
       res.forEach( item => {
         this.pastInvoices.push(item);
       })
-      debugger;
       this.pastInvoicesDataSource = new MatTableDataSource(this.pastInvoices);
     })
+  }
+
+  onDayClick(item){
+    this.userService.getOrderForDay(item.day,localStorage.getItem("email")).subscribe( (res:Array<any>) =>{
+      this.viewOrder=res;
+      this.viewOrderDate=item.day;
+      this.selectedTabIndex=2;
+    });
+  }
+
+  reportIncidentClick(element){
+    this.router.navigateByUrl('/generic-incident/'+element.day)
   }
 
 }

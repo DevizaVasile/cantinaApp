@@ -8,6 +8,7 @@ import { UnauthorizedComponent } from './unauthorized/unauthorized.component';
 import { StaffComponent } from './staff/staff.component'
 import { UserComponent } from './user/user.component';
 import { UserHistoryComponent } from './user-history/user-history.component' 
+import { GenericIncidentComponent } from './generic-incident/generic-incident.component'
 
 const routes: Routes = [
   {path: 'login', component: LoginComponent},
@@ -16,7 +17,8 @@ const routes: Routes = [
   {path: 'staff', component: StaffComponent, canActivate:[RoleGuardService], data:{expectedRole: "ROLE_STAFF"}},
   {path: 'user', component: UserComponent, canActivate:[RoleGuardService], data:{expectedRole: "ROLE_USER"}},
   {path: 'user/history', component: UserHistoryComponent, canActivate:[RoleGuardService], data:{expectedRole: "ROLE_USER"}},
-  {path: 'unauthorized', component: UnauthorizedComponent}
+  {path: 'unauthorized', component: UnauthorizedComponent},
+  {path: 'generic-incident/:day', component:GenericIncidentComponent, canActivate:[RoleGuardService], data:{expectedRole: "ROLE_USER"}}
 ];
 
 @NgModule({

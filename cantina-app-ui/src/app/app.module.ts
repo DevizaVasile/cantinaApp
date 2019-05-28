@@ -20,6 +20,8 @@ import {MatCheckboxModule} from '@angular/material/checkbox';
 import {MatListModule} from '@angular/material/list';
 import {MatGridListModule} from '@angular/material/grid-list';
 import {MatDialogModule} from '@angular/material/dialog';
+import {MatIconModule} from '@angular/material/icon';
+
 
 import { InterceptorService } from './services/interceptor.service';
 import { AppRoutingModule } from './app-routing.module';
@@ -38,6 +40,8 @@ import { UserService } from './services/user.service';
 import { DialogOverviewExampleDialog} from './user/user.component'
 import { from } from 'rxjs';
 import { UserHistoryComponent } from './user-history/user-history.component';
+import { GenericIncidentComponent } from './generic-incident/generic-incident.component';
+import { SpecificIncidentComponent } from './specific-incident/specific-incident.component';
 
 
 @NgModule({
@@ -52,7 +56,9 @@ import { UserHistoryComponent } from './user-history/user-history.component';
     StaffComponent,
     UserComponent,
     DialogOverviewExampleDialog,
-    UserHistoryComponent
+    UserHistoryComponent,
+    GenericIncidentComponent,
+    SpecificIncidentComponent
   ],
   imports: [
     FormsModule,
@@ -76,7 +82,8 @@ import { UserHistoryComponent } from './user-history/user-history.component';
     MatCheckboxModule,
     MatListModule,
     MatGridListModule,
-    MatDialogModule
+    MatDialogModule,
+    MatIconModule
   ],
   providers: [
     {

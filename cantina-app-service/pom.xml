@@ -9,7 +9,9 @@
 	<packaging>jar</packaging>
 
 	<name>cantinaApp</name>
-	<description>Demo project for Spring Boot</description>
+	<description>Proiect licenenta:Digitalizarea serviciilor 
+				cantinei Universitatii Transilvania
+	</description>
 
 	<parent>
 		<groupId>org.springframework.boot</groupId>

@@ -143,6 +143,7 @@ export class UserComponent implements OnInit {
     this.sum=0;
     this.orderedFood=[];
     this.orderedFoodList = new MatTableDataSource(this.orderedFood);
+    this.getFutureInvoice();
   }
 
   _getFoodIdAndQuantityFromOrderedItems(orderedFoodArray:Array<any>){

@@ -1,6 +1,6 @@
 <div class="content">
     <mat-tab-group [(selectedIndex)]="selectedTabIndex">
-        <mat-tab label="Home">
+        <mat-tab label="All past orders">
             <div class="row p-2 m-2">
                 <div class="border border-dark m-1 p-2 col-xl-6 col-lg-6 col-md-8 col-sm-11"> 
                     <p>Past orders</p>
@@ -8,11 +8,40 @@
                     <!-- Date Column -->
                     <ng-container matColumnDef="day">
                         <mat-header-cell *matHeaderCellDef> Date </mat-header-cell>
-                        <mat-cell *matCellDef="let element"> {{element.day}}</mat-cell>
+                        <mat-cell (click)="onDayClick(element)" *matCellDef="let element"> {{element.day}}</mat-cell>
+                    </ng-container>
+                     <!-- Report Column -->
+                     <ng-container matColumnDef="report">
+                        <mat-header-cell *matHeaderCellDef> Report an incident </mat-header-cell>
+                        <mat-cell *matCellDef="let element"> 
+                          <button (click)="reportIncidentClick(element)" mat-icon-button>
+                            <mat-icon>warning</mat-icon>
+                          </button>  </mat-cell>
                     </ng-container>
                     <mat-header-row *matHeaderRowDef="pastInvoicesColumns"></mat-header-row>
                     <mat-row *matRowDef="let row; columns: pastInvoicesColumns;"></mat-row>
                     </mat-table>
+                    
+                </div>
+            </div>
+        </mat-tab>
+
+        <mat-tab disabled label="View Order">
+            <div class="row p-2 m-2">
+                <div class="border border-dark m-1 p-2 col-xl-4 col-lg-4 col-md-4 col-sm-11">
+                    <h3 class="text-dark">
+                        {{viewOrderDate}}
+                    </h3>
+                    <table class="table">
+                        <tr>
+                            <th>Name</th>
+                            <th>Quantity</th>
+                        </tr>
+                        <tr *ngFor="let item of this.viewOrder">
+                            <td>{{item.foodName}}</td>
+                            <td>{{item.quantity}}</td>
+                        </tr>
+                    </table>
                 </div>
             </div>
         </mat-tab>
