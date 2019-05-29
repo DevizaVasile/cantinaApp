@@ -1,3 +1,15 @@
-<p>
-  generic-incident works! {{day}}
-</p>
+<div class="align-self-start border border-dark m-2 p-2 col-xl-3 col-lg-3 col-md-4 col-sm-6 col-11">
+  <div class="m-1">
+    <form [formGroup]="genericIncidentForm">
+        <fieldset>
+          <mat-form-field class="col">
+              <input name="day" formControlName="day" matInput placeholder="Day">
+          </mat-form-field>
+          <mat-form-field  class="col" >
+            <textarea required #message maxlength="256" style="min-height:5rem;" matInput placeholder="Leave a message"></textarea>
+            <p class="small-font-size">{{message.value.length}} / 256</p>
+          </mat-form-field>
+    </fieldset>         
+    <button class="m-1"  [disabled]="message.value.length == 0" mat-raised-button color="primary" (click)="submitIncident()">Submit</button>
+    </form>
+  </div>

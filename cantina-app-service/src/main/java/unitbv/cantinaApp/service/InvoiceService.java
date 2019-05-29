@@ -188,6 +188,23 @@ public class InvoiceService {
 		return orderView;
 	}
 	
+	public Long getInvoiceIdByUserIdAndDay(Long userId, String day) {
+		User user = userRepository.findById(userId).get();
+		if(userRepository.findById(userId).isPresent()) {
+			if(invoiceRepository.findByUserAndDay(user, day).isPresent()) {
+				Invoice invoice = invoiceRepository.findByUserAndDay(user, day).get();
+				return invoice.getId(); 
+			}
+			else {
+				return (long) 0;
+			}
+			
+		}
+		else {
+			return (long) 0;
+		}
+	}
+	
 	
 	
 }

@@ -3,6 +3,8 @@ package unitbv.cantinaApp.controller;
 import java.math.BigDecimal;
 import java.text.ParseException;
 import java.util.List;
+import java.util.Optional;
+
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,6 +17,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
+import unitbv.cantinaApp.exception.ResourceNotFoundException;
 import unitbv.cantinaApp.payload.ApiResponse;
 import unitbv.cantinaApp.payload.invoice.InvoiceRepresentation;
 import unitbv.cantinaApp.payload.invoice.InvoicesRequest;
@@ -35,10 +38,11 @@ public class InvoiceController {
 	UserService userService;
 	
 	@PostMapping("/newInvoice")
-	private ResponseEntity<?> createNewInvoice(@Valid @RequestBody NewInvoiceRequest newInvoiceRequest) throws ParseException {
+	private ResponseEntity<?> createNewInvoice(@Valid @RequestBody NewInvoiceRequest newInvoiceRequest) throws Exception {
 		java.util.Date day = util.TimeUtils.fromStringToDate(newInvoiceRequest.getDay());
 		if(invoiceService.isValidDay(util.TimeUtils.fromUtilDateToSqlDate(day))) {
-			invoiceService.createNewInvoice(userService.getUserByEmail(newInvoiceRequest.getEmail()),newInvoiceRequest.getDay(),  
+			User user = this.getUserFromOptional(userService.getUserByEmail(newInvoiceRequest.getEmail()));
+			invoiceService.createNewInvoice(user,newInvoiceRequest.getDay(),  
 					newInvoiceRequest.getOrder(), BigDecimal.valueOf(newInvoiceRequest.getSumRON()));			
 			return new ResponseEntity<>(new ApiResponse(true, "Invoice has been created or updated"),HttpStatus.ACCEPTED);
 		}
@@ -48,20 +52,20 @@ public class InvoiceController {
 	}
 	
 	@PostMapping("/getFutureInvoices")
-	private List<InvoiceRepresentation> getAllFutureInvoices(@RequestBody InvoicesRequest request) throws ParseException{
-		User user = userService.getUserByEmail(request.getEmail());
+	private List<InvoiceRepresentation> getAllFutureInvoices(@RequestBody InvoicesRequest request) throws Exception{
+		User user = this.getUserFromOptional(userService.getUserByEmail(request.getEmail()));
 		return invoiceService.getAllFutureInvoices(user);
 	}
 	
 	@PostMapping("/getPastInvoices")
-	private List<InvoiceRepresentation> getAllPastInvoices(@RequestBody InvoicesRequest request) throws ParseException{
-		User user = userService.getUserByEmail(request.getEmail());
+	private List<InvoiceRepresentation> getAllPastInvoices(@RequestBody InvoicesRequest request) throws Exception{
+		User user = this.getUserFromOptional(userService.getUserByEmail(request.getEmail()));
 		return invoiceService.getAllPastInvoices(user);
 	}
 	
 	@PostMapping("/getAllInvoices")
-	private List<InvoiceRepresentation> getAllInvoices(@RequestBody InvoicesRequest request) throws ParseException{
-		User user = userService.getUserByEmail(request.getEmail());
+	private List<InvoiceRepresentation> getAllInvoices(@RequestBody InvoicesRequest request) throws Exception{
+		User user = this.getUserFromOptional(userService.getUserByEmail(request.getEmail()));
 		return invoiceService.getAllInvoices(user);
 	}
 	
@@ -84,9 +88,20 @@ public class InvoiceController {
 	
 	@RequestMapping(value = "/getInvoiceFoodForDay/{day}/{userId}")
 	@ResponseBody
-	public List<OrderView> getInvoiceFoodForDay(
-			@PathVariable("day") String day,
-			@PathVariable("userId") String userId) {
-		return invoiceService.getOrderRepresentation(userService.getUserByEmail(userId), day);
+	public List<OrderView> getInvoiceFoodForDay(@PathVariable("day") String day, @PathVariable("userId") String userId) throws Exception {
+		User user = this.getUserFromOptional(userService.getUserByEmail(userId));
+		return invoiceService.getOrderRepresentation(user, day);
+	}
+	
+	private User getUserFromOptional(Optional<User> optional){
+		try {
+			return optional.orElseThrow(
+				    () -> new Exception("User not found with userId ")
+				    );
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			return null;
+		}
 	}
 }

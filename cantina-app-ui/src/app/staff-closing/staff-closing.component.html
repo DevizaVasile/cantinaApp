@@ -1,0 +1,43 @@
+<div class="content">
+  <mat-tab-group [(selectedIndex)]="selectedTabIndex" class="d-flex justify-content-start">
+    <mat-tab  label="Search for user">
+    <div  class="d-flex justify-content-start">
+      <div class="align-self-start border border-dark m-2 p-2 col-xl-3 col-lg-3 col-md-4">
+        <div class="col-12 m-1">
+          <P>{{ this.now }}</P>
+          <form [formGroup]="searchUserForm">
+              <fieldset>
+                <mat-form-field class="col-12 small-font-size">
+                    <input name="userEmail" formControlName="userEmail" matInput placeholder="User email">
+                </mat-form-field>
+          </fieldset>         
+          <button class="m-1"  [disabled]="!searchUserForm.valid" mat-raised-button color="primary" (click)="onSearch()">Search</button>
+          </form>
+        </div>
+        <hr>
+      </div>
+
+    </div>
+    </mat-tab>
+
+    <mat-tab label="View order">
+        <div class="row p-2 m-2">
+            <div class="border border-dark m-1 p-2 col-xl-4 col-lg-4 col-md-4 col-sm-11">
+                <h3 class="text-dark">
+                    {{viewOrderDate}}
+                </h3>
+                <table class="table">
+                    <tr>
+                        <th>Name</th>
+                        <th>Quantity</th>
+                    </tr>
+                    <tr *ngFor="let item of this.viewOrder">
+                        <td>{{item.foodName}}</td>
+                        <td>{{item.quantity}}</td>
+                    </tr>
+                </table>
+            </div>
+        </div>
+    </mat-tab>
+  </mat-tab-group>
+</div>

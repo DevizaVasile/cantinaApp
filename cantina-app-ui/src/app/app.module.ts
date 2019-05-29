@@ -21,6 +21,7 @@ import {MatListModule} from '@angular/material/list';
 import {MatGridListModule} from '@angular/material/grid-list';
 import {MatDialogModule} from '@angular/material/dialog';
 import {MatIconModule} from '@angular/material/icon';
+import {TextFieldModule} from '@angular/cdk/text-field';
 
 
 import { InterceptorService } from './services/interceptor.service';
@@ -42,6 +43,8 @@ import { from } from 'rxjs';
 import { UserHistoryComponent } from './user-history/user-history.component';
 import { GenericIncidentComponent } from './generic-incident/generic-incident.component';
 import { SpecificIncidentComponent } from './specific-incident/specific-incident.component';
+import { ServerErrorComponent } from './server-error/server-error.component';
+import { StaffClosingComponent } from './staff-closing/staff-closing.component';
 
 
 @NgModule({
@@ -58,7 +61,9 @@ import { SpecificIncidentComponent } from './specific-incident/specific-incident
     DialogOverviewExampleDialog,
     UserHistoryComponent,
     GenericIncidentComponent,
-    SpecificIncidentComponent
+    SpecificIncidentComponent,
+    ServerErrorComponent,
+    StaffClosingComponent
   ],
   imports: [
     FormsModule,
@@ -83,7 +88,8 @@ import { SpecificIncidentComponent } from './specific-incident/specific-incident
     MatListModule,
     MatGridListModule,
     MatDialogModule,
-    MatIconModule
+    MatIconModule,
+    TextFieldModule
   ],
   providers: [
     {

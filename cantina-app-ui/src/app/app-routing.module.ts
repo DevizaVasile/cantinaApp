@@ -9,6 +9,8 @@ import { StaffComponent } from './staff/staff.component'
 import { UserComponent } from './user/user.component';
 import { UserHistoryComponent } from './user-history/user-history.component' 
 import { GenericIncidentComponent } from './generic-incident/generic-incident.component'
+import { ServerErrorComponent } from './server-error/server-error.component'
+import { StaffClosingComponent } from './staff-closing/staff-closing.component'
 
 const routes: Routes = [
   {path: 'login', component: LoginComponent},
@@ -18,7 +20,9 @@ const routes: Routes = [
   {path: 'user', component: UserComponent, canActivate:[RoleGuardService], data:{expectedRole: "ROLE_USER"}},
   {path: 'user/history', component: UserHistoryComponent, canActivate:[RoleGuardService], data:{expectedRole: "ROLE_USER"}},
   {path: 'unauthorized', component: UnauthorizedComponent},
-  {path: 'generic-incident/:day', component:GenericIncidentComponent, canActivate:[RoleGuardService], data:{expectedRole: "ROLE_USER"}}
+  {path: 'generic-incident/:day', component:GenericIncidentComponent, canActivate:[RoleGuardService], data:{expectedRole: "ROLE_USER"}},
+  {path: 'error', component:ServerErrorComponent},
+  {path: 'staff-closing', component:StaffClosingComponent, canActivate:[RoleGuardService], data:{expectedRole: "ROLE_STAFF"}}
 ];
 
 @NgModule({

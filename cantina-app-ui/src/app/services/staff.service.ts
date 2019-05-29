@@ -9,9 +9,7 @@ import { throwError } from 'rxjs';
 })
 export class StaffService {
 
-  destination:String="'http://www.localhost:5000/api";
   constructor(private http: HttpClient) {
-
   }
 
   getFood(){

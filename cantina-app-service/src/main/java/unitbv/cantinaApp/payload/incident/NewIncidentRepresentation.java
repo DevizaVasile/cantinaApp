@@ -2,11 +2,9 @@ package unitbv.cantinaApp.payload.incident;
 
 public class NewIncidentRepresentation {
  
-	String userId;
+	String userEmail;
 	
-	boolean isGeneric;
-	
-	Long id;
+	int generic;
 	
 	String day;
 	
@@ -18,28 +16,20 @@ public class NewIncidentRepresentation {
 		super();
 	}
 
-	public String getUserId() {
-		return userId;
+	public String getUserEmail() {
+		return userEmail;
 	}
 
-	public void setUserId(String userId) {
-		this.userId = userId;
+	public void setUserEmail(String userId) {
+		this.userEmail = userId;
 	}
 
-	public boolean isGeneric() {
-		return isGeneric;
+	public int getGeneric() {
+		return generic;
 	}
 
-	public void setGeneric(boolean isGeneric) {
-		this.isGeneric = isGeneric;
-	}
-
-	public Long getId() {
-		return id;
-	}
-
-	public void setId(Long id) {
-		this.id = id;
+	public void setGeneric(int generic) {
+		this.generic = generic;
 	}
 
 	public String getDay() {

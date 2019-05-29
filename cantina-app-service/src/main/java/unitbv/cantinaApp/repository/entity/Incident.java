@@ -45,7 +45,7 @@ public class Incident {
 
 	public Incident(Long id, String text, boolean isGeneric, String day, String createdAt, Long userId) {
 		super();
-		if(isGeneric) {
+		if(isGeneric == true) {
 			this.invoiceId = id;
 		}
 		else {
