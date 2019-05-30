@@ -96,6 +96,22 @@ export class StaffService {
       );
   }
 
+  closeOrder(payload:Object){
+    return this.http.post("http://localhost:5000/api/invoice/closeOrder",payload).pipe(
+      tap( res => {}),
+      catchError(err => {
+         return throwError(err.error.message)}) 
+    );
+  }
+
+  isOrderClosed(payload:Object){
+    return this.http.post("http://localhost:5000/api/invoice/isOrderClosed",payload).pipe(
+      tap( res => {}),
+      catchError(err => {
+         return throwError(err.error.message)}) 
+    );
+  }
+
 }
 
  interface MenuUpdate{

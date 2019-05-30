@@ -36,6 +36,9 @@
                         <td>{{item.quantity}}</td>
                     </tr>
                 </table>
+                <br>
+                <button class="m-1"  [disabled]="orderStatusClosed" mat-raised-button color="primary" (click)="onCloseOrder()">Close Order</button>
+                <p *ngIf="orderStatusClosed">Order has been closed</p>
             </div>
         </div>
     </mat-tab>

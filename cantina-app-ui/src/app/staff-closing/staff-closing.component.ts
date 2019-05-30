@@ -5,11 +5,13 @@ import { Router } from '@angular/router';
 import { MatSnackBar } from '@angular/material'
 
 import { UserService } from '../services/user.service'
+import { StaffService } from '../services/staff.service'
 
 @Component({
   selector: 'app-staff-closing',
   templateUrl: './staff-closing.component.html',
-  styleUrls: ['./staff-closing.component.css']
+  styleUrls: ['./staff-closing.component.css'],
+  providers: [StaffService, UserService]
 })
 export class StaffClosingComponent implements OnInit {
 
@@ -17,8 +19,9 @@ export class StaffClosingComponent implements OnInit {
   now:string;
   selectedTabIndex:number;
   viewOrder:Array<any>;
+  orderStatusClosed: boolean;
 
-  constructor(private userService: UserService, private fb:FormBuilder, private router:Router,public snackBar: MatSnackBar) {
+  constructor(private userService: UserService, private fb:FormBuilder, private router:Router,public snackBar: MatSnackBar, private staffService: StaffService) {
   
     this.selectedTabIndex=0;
 
@@ -33,6 +36,8 @@ export class StaffClosingComponent implements OnInit {
    }
 
   ngOnInit() {
+    this.orderStatusClosed = true;
+    this.isOrderClosed()
   }
 
   onSearch(){
@@ -49,11 +54,23 @@ export class StaffClosingComponent implements OnInit {
       }
 
       (err) => {
-        debugger
         this.snackBar.open("User not found","x",{duration:2000})
       }
       
     });
+  }
+
+  onCloseOrder(){
+    this.staffService.closeOrder({userEmail: localStorage.getItem("email"), day:this._getNowAsString()}).subscribe( (res:any) =>{
+      this.snackBar.open("Order closed","x",{duration:2000})
+      this.isOrderClosed()
+    })
+  }
+
+  isOrderClosed(){
+    this.staffService.isOrderClosed({userEmail: localStorage.getItem("email"), day:this._getNowAsString()}).subscribe( (res:any) =>{
+      this.orderStatusClosed = res;
+    })
   }
 
   _getNowAsString(){

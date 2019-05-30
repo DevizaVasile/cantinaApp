@@ -205,6 +205,19 @@ public class InvoiceService {
 		}
 	}
 	
+	public boolean isInvoiceClosed(User user, String day) {
+		return invoiceRepository.findByUserAndDay(user, day).get().getProcessed();
+	}
+	
+	public void closeInvoice(User user, String day) {
+		if(!this.isInvoiceClosed(user, day)) {
+			Invoice invoice = invoiceRepository.findByUserAndDay(user, day).get();
+			invoice.setProcessed(true);
+			invoiceRepository.save(invoice);
+		}
+	}
+	
+	
 	
 	
 }

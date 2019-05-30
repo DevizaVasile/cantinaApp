@@ -7,6 +7,7 @@ import { UserService } from '../services/user.service'
 
 
 
+
 @Component({
   selector: 'app-user-history',
   templateUrl: './user-history.component.html',
@@ -55,6 +56,8 @@ export class UserHistoryComponent implements OnInit {
   reportIncidentClick(element){
     this.router.navigateByUrl('/generic-incident/'+element.day)
   }
+
+  
 
 }
 

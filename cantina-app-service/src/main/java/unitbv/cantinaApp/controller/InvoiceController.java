@@ -1,7 +1,6 @@
 package unitbv.cantinaApp.controller;
 
 import java.math.BigDecimal;
-import java.text.ParseException;
 import java.util.List;
 import java.util.Optional;
 
@@ -17,8 +16,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
-import unitbv.cantinaApp.exception.ResourceNotFoundException;
 import unitbv.cantinaApp.payload.ApiResponse;
+import unitbv.cantinaApp.payload.CloseOrder;
 import unitbv.cantinaApp.payload.invoice.InvoiceRepresentation;
 import unitbv.cantinaApp.payload.invoice.InvoicesRequest;
 import unitbv.cantinaApp.payload.invoice.NewInvoiceRequest;
@@ -93,6 +92,13 @@ public class InvoiceController {
 		return invoiceService.getOrderRepresentation(user, day);
 	}
 	
+	@PostMapping("/closeOrder")
+	public boolean closeOrder(@RequestBody CloseOrder closeOrder) {
+		User user = this.getUserFromOptional(userService.getUserByEmail(closeOrder.getUserEmail()));
+		invoiceService.closeInvoice(user, closeOrder.getDay());		
+		return true;
+	}
+	
 	private User getUserFromOptional(Optional<User> optional){
 		try {
 			return optional.orElseThrow(
@@ -103,5 +109,11 @@ public class InvoiceController {
 			e.printStackTrace();
 			return null;
 		}
+	}
+	
+	@PostMapping("/isOrderClosed")
+	public boolean isOrderClosed(@RequestBody CloseOrder order) {
+		User user = this.getUserFromOptional(userService.getUserByEmail(order.getUserEmail()));
+		return invoiceService.isInvoiceClosed(user, order.getDay());
 	}
 }
