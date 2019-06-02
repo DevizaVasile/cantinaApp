@@ -14,9 +14,23 @@
                      <ng-container matColumnDef="report">
                         <mat-header-cell *matHeaderCellDef> Report an incident </mat-header-cell>
                         <mat-cell *matCellDef="let element"> 
-                          <button (click)="reportIncidentClick(element)" mat-icon-button>
+                          <button *ngIf="element.status == -1"  (click)="reportIncidentClick(element)" mat-icon-button>
                             <mat-icon>warning</mat-icon>
-                          </button>  </mat-cell>
+                          </button> 
+                          <button *ngIf="element.status == 1"  (click)="watchResponse(element)" mat-icon-button>
+                            <mat-icon>notification_important</mat-icon>
+                          </button>
+                          <button *ngIf="element.status == 0" mat-icon-button>
+                            <mat-icon>hourglass_empty</mat-icon>
+                          </button>
+                          <button *ngIf="element.status == 2" mat-icon-button>
+                            <mat-icon>thumb_up_alt</mat-icon>
+                          </button>
+                          <button *ngIf="element.status == 3" mat-icon-button>
+                            <mat-icon>thumb_down_alt</mat-icon>
+                          </button>
+                        </mat-cell>
+                          
                     </ng-container>
                     <mat-header-row *matHeaderRowDef="pastInvoicesColumns"></mat-header-row>
                     <mat-row *matRowDef="let row; columns: pastInvoicesColumns;"></mat-row>

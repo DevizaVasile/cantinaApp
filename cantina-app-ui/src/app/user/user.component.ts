@@ -78,6 +78,7 @@ export class UserComponent implements OnInit {
       this.foodList = new MatTableDataSource(this.allFood);
 
       //clear all older selections
+      debugger
       this._cleanUp();
       
     });
@@ -135,6 +136,7 @@ export class UserComponent implements OnInit {
         this.snackBar.open(error.error.message,"x",{duration:2000})
       }
     )
+    debugger;
     this._cleanUp();
   }
 
@@ -212,7 +214,7 @@ interface Food{
 @Component({
   selector: 'dialog-overview-example-dialog',
   template: `
-              <p>Are you usere you want to place the order?</p>
+              <p>Are you ready to place the order?</p>
               <button  mat-raised-button class="m-1 p-1" (click)="onYesClick()">Yes</button> 
               <button  mat-raised-button class="m-1 p-1" (click)="onNoClick()">No Thanks</button>
              `

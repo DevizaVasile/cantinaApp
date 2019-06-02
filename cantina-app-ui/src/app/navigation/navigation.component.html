@@ -11,6 +11,7 @@
       
       <a class="nav-item nav-link" *ngIf="(this.authService.isLoggedIn() && this.authService.hasRole('ROLE_STAFF'))" routerLink="/staff" routerLinkActive="active">Planning Panel</a>
       <a class="nav-item nav-link" *ngIf="(this.authService.isLoggedIn() && this.authService.hasRole('ROLE_STAFF'))" routerLink="/staff-closing" routerLinkActive="active">Serving Panel</a>
+      <a class="nav-item nav-link" *ngIf="(this.authService.isLoggedIn() && this.authService.hasRole('ROLE_STAFF'))" routerLink="/staff-incidents" routerLinkActive="active">Incidents Panel</a>
       
       <a class="nav-item nav-link" *ngIf="(this.authService.isLoggedIn() && this.authService.hasRole('ROLE_USER'))" routerLink="/user" routerLinkActive="active">Orders</a>
       <a class="nav-item nav-link" *ngIf="(this.authService.isLoggedIn() && this.authService.hasRole('ROLE_USER'))" routerLink="/user/history" routerLinkActive="active">History</a>

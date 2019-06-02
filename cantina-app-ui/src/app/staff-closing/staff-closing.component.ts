@@ -37,7 +37,7 @@ export class StaffClosingComponent implements OnInit {
 
   ngOnInit() {
     this.orderStatusClosed = true;
-    this.isOrderClosed()
+    // this.isOrderClosed()
   }
 
   onSearch(){
@@ -61,14 +61,14 @@ export class StaffClosingComponent implements OnInit {
   }
 
   onCloseOrder(){
-    this.staffService.closeOrder({userEmail: localStorage.getItem("email"), day:this._getNowAsString()}).subscribe( (res:any) =>{
+    this.staffService.closeOrder({userEmail: this.searchUserForm.getRawValue().userEmail, day:this._getNowAsString()}).subscribe( (res:any) =>{
       this.snackBar.open("Order closed","x",{duration:2000})
       this.isOrderClosed()
     })
   }
 
   isOrderClosed(){
-    this.staffService.isOrderClosed({userEmail: localStorage.getItem("email"), day:this._getNowAsString()}).subscribe( (res:any) =>{
+    this.staffService.isOrderClosed({userEmail: this.searchUserForm.getRawValue().userEmail, day:this._getNowAsString()}).subscribe( (res:any) =>{
       this.orderStatusClosed = res;
     })
   }

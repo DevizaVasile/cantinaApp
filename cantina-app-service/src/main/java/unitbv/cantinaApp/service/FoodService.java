@@ -18,10 +18,10 @@ import unitbv.cantinaApp.repository.entity.Food;
 public class FoodService {
 		
 	@Autowired
-	private FoodRepository foodRepository;
+	private MenuRepository menuRepository;
 	
 	@Autowired
-	private MenuRepository menuRepository;
+	private FoodRepository foodRepository;
 	
 	public Food createNewFood(String name, int weight, Double price, boolean active)
 	{

@@ -1,8 +1,8 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Inject } from '@angular/core';
 import {MatTableDataSource,MatPaginator,MatSort} from '@angular/material';
 import { Router } from '@angular/router';
 import {MatSnackBar} from '@angular/material';
-
+import {MatDialog, MatDialogRef, MAT_DIALOG_DATA} from '@angular/material';
 import { UserService } from '../services/user.service'
 
 
@@ -24,7 +24,7 @@ export class UserHistoryComponent implements OnInit {
   viewOrder:Array<any>;
   viewOrderDate:String;
   
-  constructor(private userService:UserService, private router:Router) {
+  constructor(private userService:UserService, private router:Router, public dialog: MatDialog) {
     this.selectedTabIndex=0;
 
     this.viewOrder = [];
@@ -57,11 +57,66 @@ export class UserHistoryComponent implements OnInit {
     this.router.navigateByUrl('/generic-incident/'+element.day)
   }
 
-  
+  watchResponse(element): void {
+    this.userService.getMessage(element.day, element.email).subscribe( res =>{
+      const dialogRef = this.dialog.open(DialogOverviewExampleDialog2, {
+        width: '350px',
+        data:{message:res}
+      });
+      let that = this;
+      dialogRef.afterClosed().subscribe( result => {
+        if(result){
+          this.userService.setFeedback(element.day, element.email, 2).subscribe()
+        }
+        else{
+          this.userService.setFeedback(element.day, element.email, 3).subscribe()
+        }
+
+        setTimeout(function(){
+          that.getPastInvoice()
+            }, 1500);
+         });
+    },
+    err =>{
+      
+    })
+    
+  }
 
 }
 
 interface PastInvoices{
   day:string;
   email:string;
+}
+
+interface DialogData{
+  message:string;
+}
+
+@Component({
+  selector: 'dialog-overview-example-dialog2',
+  template: `
+              <p>{{data.message.response}}</p>
+              <p>Are you satisfied with the response from the staff?</p>
+              <button  mat-raised-button class="m-1 p-1" (click)="onYesClick()">Yes</button> 
+              <button  mat-raised-button class="m-1 p-1" (click)="onNoClick()">No Thanks</button>
+             `
+})
+export class DialogOverviewExampleDialog2 {
+
+  constructor(
+    public dialogRef: MatDialogRef<DialogOverviewExampleDialog2>,
+    @Inject(MAT_DIALOG_DATA) public data: DialogData) {
+
+    }
+
+  onNoClick(): void {
+    this.dialogRef.disableClose=true;
+    this.dialogRef.close(false);
+  }
+
+  onYesClick(): void {
+    this.dialogRef.close(true);
+  }
 }

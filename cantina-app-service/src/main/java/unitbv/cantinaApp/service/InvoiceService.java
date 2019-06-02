@@ -40,6 +40,9 @@ public class InvoiceService {
 	@Autowired
 	FoodInvoiceRepository foodInvoiceRepository;
 	
+	@Autowired
+	IncidentService incidentService;
+	
 	public Invoice createNewInvoice(User user,String day, List<OrderRepresentation> order, BigDecimal sumRON) throws ParseException {
 		Invoice returnInvoice;
 		if(!hasInvoiceForDay(user,day) ) {
@@ -74,7 +77,7 @@ public class InvoiceService {
 			Invoice inv = itr.next();
 			java.util.Date date = util.TimeUtils.fromStringToDate(inv.getDay());
 			if(date.compareTo(now)>=0) {
-				result.add(new InvoiceRepresentation(inv.getUser().getEmail(),inv.getDay()));
+				result.add(new InvoiceRepresentation(inv.getUser().getEmail(),inv.getDay(),-2));
 			}
 		}
 		return result;
@@ -87,9 +90,10 @@ public class InvoiceService {
 		java.util.Date now = util.TimeUtils.fromInstantToDate();
 		while(itr.hasNext()) {
 			Invoice inv = itr.next();
+			int incidentStatus = incidentService.getIncidentStatusByUserIdAndDay(user.getId(), inv.getDay());
 			java.util.Date date = util.TimeUtils.fromStringToDate(inv.getDay());
 			if(date.compareTo(now)<0) {
-				result.add(new InvoiceRepresentation(inv.getUser().getEmail(),inv.getDay()));
+				result.add(new InvoiceRepresentation(inv.getUser().getEmail(),inv.getDay(),incidentStatus));
 			}
 		}
 		return result;
@@ -101,7 +105,7 @@ public class InvoiceService {
 		Iterator<Invoice> itr = invoices.iterator();
 		while(itr.hasNext()) {
 			Invoice inv = itr.next();
-			result.add(new InvoiceRepresentation(inv.getUser().getEmail(),inv.getDay()));	
+			result.add(new InvoiceRepresentation(inv.getUser().getEmail(),inv.getDay(),0));	
 		}
 		return result;
 	}

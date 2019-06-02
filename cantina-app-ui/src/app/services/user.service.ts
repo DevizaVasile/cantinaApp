@@ -60,4 +60,20 @@ export class UserService {
     );
   }
 
+  getMessage(dayVal:String, userIdVal:String){
+    let payload = {day:dayVal, userId:userIdVal}
+    return this.http.post("http://localhost:5000/api/incident/getMessageFor",payload).pipe(
+      tap( ),
+      catchError(err => {
+        return throwError(err)})   
+    );
+  }
+
+  setFeedback(day:String, userId:String, feedback:number){
+    return this.http.get("http://localhost:5000/api/incident/giveFeedback/"+day+"/"+userId+"/"+feedback).pipe(
+      tap( res => res),
+      catchError(err => {
+        return throwError(err.error.message)})   
+    );
+  }
 }

@@ -18,8 +18,6 @@ public class NewInvoiceRequest {
 		super();
 	}
 	
-	
-	
 	public NewInvoiceRequest(@NotBlank String email, @NotBlank String day, List<OrderRepresentation> order,
 			Double sumRON) {
 		super();

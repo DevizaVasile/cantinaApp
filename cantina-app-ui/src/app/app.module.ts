@@ -38,13 +38,14 @@ import { UserComponent } from './user/user.component';
 import { AuthService } from './services/auth.service';
 import { StaffService } from './services/staff.service';
 import { UserService } from './services/user.service';
-import { DialogOverviewExampleDialog} from './user/user.component'
+import { DialogOverviewExampleDialog } from './user/user.component';
+import { DialogOverviewExampleDialog2 } from './user-history/user-history.component';
 import { from } from 'rxjs';
 import { UserHistoryComponent } from './user-history/user-history.component';
 import { GenericIncidentComponent } from './generic-incident/generic-incident.component';
-import { SpecificIncidentComponent } from './specific-incident/specific-incident.component';
 import { ServerErrorComponent } from './server-error/server-error.component';
 import { StaffClosingComponent } from './staff-closing/staff-closing.component';
+import { StaffIncidentsComponent } from './staff-incidents/staff-incidents.component';
 
 
 @NgModule({
@@ -59,11 +60,12 @@ import { StaffClosingComponent } from './staff-closing/staff-closing.component';
     StaffComponent,
     UserComponent,
     DialogOverviewExampleDialog,
+    DialogOverviewExampleDialog2,
     UserHistoryComponent,
     GenericIncidentComponent,
-    SpecificIncidentComponent,
     ServerErrorComponent,
-    StaffClosingComponent
+    StaffClosingComponent,
+    StaffIncidentsComponent
   ],
   imports: [
     FormsModule,
@@ -103,6 +105,6 @@ import { StaffClosingComponent } from './staff-closing/staff-closing.component';
     MatDatepickerModule
   ],
   bootstrap: [AppComponent],
-  entryComponents:[DialogOverviewExampleDialog]
+  entryComponents:[DialogOverviewExampleDialog,DialogOverviewExampleDialog2]
 })
 export class AppModule { }

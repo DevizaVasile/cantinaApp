@@ -19,7 +19,7 @@ export class GenericIncidentComponent implements OnInit {
   constructor(private route: ActivatedRoute, private fb:FormBuilder, private router:Router, private incidentService:IncidentService) { 
     this.genericIncidentForm = this.fb.group({
       day:[ {value: '', disabled:true}],
-      message:[ {value:''}]
+      message:[ ]
     });
   }
 
@@ -35,10 +35,10 @@ export class GenericIncidentComponent implements OnInit {
       userEmail:localStorage.getItem("email"),
       isGeneric:true,
       day:this.genericIncidentForm.getRawValue().day,
-      text:this.genericIncidentForm.getRawValue().message.value,
+      text:this.genericIncidentForm.getRawValue().message,
       createdAt:now.getFullYear()+"-"+(now.getMonth()+1)+"-"+now.getDay()
     }
-
+    
     this.incidentService.createNewIncident(payload).subscribe(
       (res:any) => {
         this.router.navigateByUrl("/user")

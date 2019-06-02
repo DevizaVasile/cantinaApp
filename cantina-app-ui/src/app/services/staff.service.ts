@@ -112,6 +112,22 @@ export class StaffService {
     );
   }
 
+  getAllOpenIncidents(){
+    return this.http.get("http://localhost:5000/api/incident/getAllOpen").pipe(
+      tap( res => {}),
+      catchError(err => {
+         return throwError(err.error.message)}) 
+    );
+  }
+
+  updateIncidentMessage(payload:Object){
+    return this.http.post("http://localhost:5000/api/incident/setResponse",payload).pipe(
+      tap( res => {}),
+      catchError(err => {
+         return throwError(err.error.message)}) 
+    );
+  }
+
 }
 
  interface MenuUpdate{

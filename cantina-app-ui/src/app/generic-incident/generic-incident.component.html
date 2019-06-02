@@ -6,7 +6,7 @@
               <input name="day" formControlName="day" matInput placeholder="Day">
           </mat-form-field>
           <mat-form-field  class="col" >
-            <textarea required #message maxlength="256" style="min-height:5rem;" matInput placeholder="Leave a message"></textarea>
+            <textarea  #message formControlName="message" maxlength="256" style="min-height:5rem;" matInput placeholder="Leave a message"></textarea>
             <p class="small-font-size">{{message.value.length}} / 256</p>
           </mat-form-field>
     </fieldset>         

@@ -30,6 +30,11 @@ public class Incident {
 	@Column
 	private String response;
 	
+	//Status values
+	// 0 created
+	// 1 seen by staff
+	// 2 resolved ok
+	// 3 resolved not ok
 	@Column
 	private Integer status;
 	
@@ -97,5 +102,39 @@ public class Incident {
 	public void setStatus(Integer status) {
 		this.status = status;
 	}
+
+	public Long getId() {
+		return id;
+	}
+
+	public Long getUserId() {
+		return userId;
+	}
+
+	public void setUserId(Long userId) {
+		this.userId = userId;
+	}
+
+	public String getDay() {
+		return day;
+	}
+
+	public void setDay(String day) {
+		this.day = day;
+	}
+
+	public String getCreatedAt() {
+		return createdAt;
+	}
+
+	public void setCreatedAt(String createdAt) {
+		this.createdAt = createdAt;
+	}
+
+	public void setId(Long id) {
+		this.id = id;
+	}
+	
+	
 
 }

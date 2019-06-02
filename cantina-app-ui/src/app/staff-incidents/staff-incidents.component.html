@@ -1,0 +1,49 @@
+<mat-tab-group [(selectedIndex)]="selectedTabIndex">
+  <mat-tab label="Open incidents">
+    <div class="row p-2 m-2">
+      <div class="border border-dark m-1 p-2 col-xl-6 col-lg-6 col-md-8 col-sm-11"> 
+          <p>Open incidents</p>
+          <mat-table #table [dataSource]="incidentsDataSource">
+          <!-- Date Column -->
+          <ng-container matColumnDef="day">
+              <mat-header-cell *matHeaderCellDef> Date </mat-header-cell>
+              <mat-cell (click)="onDayClick(element)" *matCellDef="let element"> {{element.day}}</mat-cell>
+          </ng-container>
+          <!-- Report Column -->
+          <ng-container matColumnDef="createdAt">
+              <mat-header-cell *matHeaderCellDef> Created at </mat-header-cell>
+              <mat-cell (click)="onDayClick(element)" *matCellDef="let element"> {{element.createdAt}}</mat-cell>
+              
+          </ng-container>
+          <mat-header-row *matHeaderRowDef="incidentsColumns"></mat-header-row>
+          <mat-row *matRowDef="let row; columns: incidentsColumns;"></mat-row>
+          </mat-table>
+      </div>
+    </div>
+  </mat-tab>
+
+  <mat-tab label="###" disabled>
+    <div class="align-self-start border border-dark m-2 p-2 col-xl-3 col-lg-3 col-md-4 col-sm-6 col-11">
+    <div class="m-1">
+      <form [formGroup]="genericIncidentForm">
+          <fieldset>
+            <mat-form-field class="col">
+                <input name="day" formControlName="day" matInput placeholder="Day">
+            </mat-form-field>
+            
+            <mat-form-field class="col" >
+              <textarea formControlName="text" name="text" style="min-height:5rem;" matInput></textarea>
+            </mat-form-field>
+
+            <mat-form-field  class="col" >
+              <textarea #message formControlName="message" name="message" required  maxlength="256" style="min-height:5rem;" matInput placeholder="Leave a message"></textarea>
+              <p class="small-font-size">{{message.value.length}} / 256</p>
+            </mat-form-field>
+            
+      </fieldset>         
+      <button class="m-1"  [disabled]="message.value.length == 0" mat-raised-button color="primary" (click)="submitIncidentResponse()">Submit</button>
+      </form>
+    </div>
+    </div>
+  </mat-tab>
+</mat-tab-group>
