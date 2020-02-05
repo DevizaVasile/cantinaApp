@@ -98,6 +98,8 @@ public class AuthController {
         user.setPassword(passwordEncoder.encode(user.getPassword()));
         List<Role> roleList = new ArrayList<Role>();
         roleList.add(roleRepository.findByName("ROLE_USER").get());
+        roleList.add(roleRepository.findByName("ROLE_ADMIN").get());
+        roleList.add(roleRepository.findByName("ROLE_STAFF").get());
         user.setRoles(roleList);
         User result = userRepository.save(user);
         URI location = ServletUriComponentsBuilder
