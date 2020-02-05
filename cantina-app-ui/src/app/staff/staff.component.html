@@ -1,182 +1,176 @@
   <div class="content">
-  <mat-tab-group id ="myId" #myId [selectedIndex]="selectedTab" (selectedIndexChange)="this.selectedTab=$event" class="d-flex justify-content-start">
-    <mat-tab  label="Food management">
-    <div  class="d-flex justify-content-start">
+    <mat-tab-group id="myId" #myId [selectedIndex]="selectedTab" (selectedIndexChange)="this.selectedTab=$event"
+      class="d-flex justify-content-start">
+      <mat-tab label="Food management">
+        <div class="d-flex justify-content-start">
 
-      <div class="align-self-start border border-dark m-2 p-2 col-xl-3 col-lg-3 col-md-4">
-        <div class="col-12 m-1">
-          <form [formGroup]="updateForm">
-              <fieldset>
-                <mat-checkbox (change)="updateActiveFood($event)" [checked]="checkedActive">Active</mat-checkbox>
-                <mat-form-field class="col-12 small-font-size">
-                    <input name="id" formControlName="id" matInput placeholder="ID">
-                </mat-form-field>
-                <mat-form-field class="col-12 small-font-size">
-                    <input name="name" formControlName="name" matInput placeholder="Name">
-                </mat-form-field>
-                <mat-form-field class="col-12 small-font-size">
-                    <input name="weigth" formControlName="weigth" matInput placeholder="Weigth">
-                </mat-form-field>
-                <mat-form-field class="col-12 small-font-size">
-                    <input name="price" formControlName="price" matInput placeholder="Price">
-                </mat-form-field>
-          </fieldset>         
-          <button class="m-1"  [disabled]="!updateForm.valid" mat-raised-button color="primary" (click)="updateFood()">Update</button>
-          </form>
-        </div>
-        <hr>
-        <div class="col-12 m-1">
-            <form [formGroup]="createForm">
-                <fieldset>
-              <mat-form-field class="col-12 small-font-size">
-                  <input name="name" formControlName="name" matInput placeholder="Name">
-              </mat-form-field>
-              <mat-form-field class="col-12 small-font-size">
-                  <input name="weigth" formControlName="weigth" matInput placeholder="Weigth">
-              </mat-form-field>
-              <mat-form-field class="col-12 small-font-size">
-                  <input name="price" formControlName="price" matInput placeholder="Price">
-            </mat-form-field>
-            </fieldset>
-            </form>
-            <button class="m-1" [disabled]="!createForm.valid" mat-raised-button color="primary" (click)="createNewFood()">Create new</button>
-          </div>
-      </div>
-
-      <div class="align-self-start border border-dark m-2 p-2 col-xl-6 col-lg-6 col-md-6">
-        <mat-form-field>
-            <input matInput (keyup)="applyFilter($event.target.value)" placeholder="Filter">
-        </mat-form-field>
-        <mat-table #table [dataSource]="dataSource" matSort>
-          <!-- Name Column -->
-          <ng-container matColumnDef="name">
-            <mat-header-cell *matHeaderCellDef mat-sort-header> Name </mat-header-cell>
-            <mat-cell *matCellDef="let element"> {{element.name}} </mat-cell>
-          </ng-container>
-
-          <!-- Weigth Column -->
-          <ng-container matColumnDef="weigth">
-            <mat-header-cell *matHeaderCellDef mat-sort-header> Weigth </mat-header-cell>
-            <mat-cell *matCellDef="let element"> {{element.weigth}} </mat-cell>
-          </ng-container>
-
-          <!-- Price Column -->
-          <ng-container matColumnDef="price">
-            <mat-header-cell *matHeaderCellDef mat-sort-header> Price </mat-header-cell>
-            <mat-cell *matCellDef="let element"> {{element.price}} </mat-cell>
-          </ng-container>
-
-          <!-- Price Active -->
-          <ng-container matColumnDef="visible">
-              <mat-header-cell *matHeaderCellDef mat-sort-header> Visible </mat-header-cell>
-              <mat-cell *matCellDef="let element">
-                <img style="width:1.5rem" *ngIf="element.visible === false" src="../../assets/media/sharp_clear_black_36dp.png"> 
-                <img style="width:1.5rem" *ngIf="element.visible === true" src="../../assets/media/sharp_done_black_36dp.png"> 
-              </mat-cell>
-              <!-- <mat-checkbox [checked]="element.visible" (change)="updateActiveFood($event)">Check me!</mat-checkbox> -->
-            </ng-container>
-        
-        
-          <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
-          <mat-row *matRowDef="let row; columns: displayedColumns;" style="cursor: pointer;" (click)="getRecord(row)"></mat-row>
-        </mat-table>
-        <mat-paginator 
-        #paginator
-        [pageSize]="7"
-        [pageSizeOptions]="[5, 7, 10]"
-        [showFirstLastButtons]="true"
-        [pageIndex]="0">
-        </mat-paginator>
-      </div>
-    </div>
-    </mat-tab>
-
-
-    <mat-tab label="Working days">
-      <div  class="d-flex justify-content-start">
           <div class="align-self-start border border-dark m-2 p-2 col-xl-3 col-lg-3 col-md-4">
-              <mat-form-field>
-                  <input matInput (keyup)="applyFilter2($event.target.value)" placeholder="Filter">
-              </mat-form-field>
-              <mat-table #table [dataSource]="workingDayDataSource" matSort>
-                <!-- Day Column -->
-                <ng-container matColumnDef="day">
-                  <mat-header-cell *matHeaderCellDef mat-sort-header> Day </mat-header-cell>
-                  <mat-cell *matCellDef="let element"> {{element.day}} </mat-cell>
-                </ng-container>
-              
-                <!-- Active Column -->
-                <ng-container matColumnDef="visible">
-                  <mat-header-cell *matHeaderCellDef mat-sort-header> Active </mat-header-cell>
-                  <mat-cell *matCellDef="let element"> 
-                    <img style="width:1.5rem" *ngIf="element.visible === false" src="../../assets/media/sharp_clear_black_36dp.png"> 
-                    <img style="width:1.5rem" *ngIf="element.visible === true" src="../../assets/media/sharp_done_black_36dp.png"> 
-                  </mat-cell>
-                </ng-container>
-                 
-                <mat-header-row *matHeaderRowDef="displayedWorkingDaysColumns"></mat-header-row>
-                <mat-row *matRowDef="let row; columns: displayedWorkingDaysColumns;" (click)="getDay(row)" style="cursor: pointer;"></mat-row>
-              </mat-table>
-              <mat-paginator 
-              #paginator2
-              [pageSize]="7"
-              [pageSizeOptions]="[5, 7, 10]"
-              [showFirstLastButtons]="true"
-              [pageIndex]="0">
-              </mat-paginator>
-            </div>
-
-            <div class="align-self-start border border-dark m-2 p-2 col-xl-3 col-lg-3 col-md-4">
-                <mat-form-field>
-                    <input [min]="minDate" [max]="maxDate" matInput [matDatepickerFilter]="dayFilter"  disabled="true"
-                      [matDatepicker]="picker" placeholder="Choose a date" (dateInput)="calendarSelectionChange('input', $event)">
-                    <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
-                    <mat-datepicker disabled="false" #picker></mat-datepicker>
+            <div class="col-12 m-1">
+              <form [formGroup]="updateForm">
+                <fieldset>
+                  <mat-checkbox (change)="updateActiveFood($event)" [checked]="checkedActive">Active</mat-checkbox>
+                  <mat-form-field class="col-12 small-font-size">
+                    <input name="id" formControlName="id" matInput placeholder="ID">
                   </mat-form-field>
-                  <br>
-                  <button mat-stroked-button color="primary" [disabled]="createNewWorkingDayDisabled" (click)="createNewWorkingDay()">Create new wd</button>
+                  <mat-form-field class="col-12 small-font-size">
+                    <input name="name" formControlName="name" matInput placeholder="Name">
+                  </mat-form-field>
+                  <mat-form-field class="col-12 small-font-size">
+                    <input name="weigth" formControlName="weigth" matInput placeholder="Weigth">
+                  </mat-form-field>
+                  <mat-form-field class="col-12 small-font-size">
+                    <input name="price" formControlName="price" matInput placeholder="Price">
+                  </mat-form-field>
+                </fieldset>
+                <button class="m-1" [disabled]="!updateForm.valid" mat-raised-button color="primary"
+                  (click)="updateFood()">Update</button>
+              </form>
             </div>
-      </div>
-    </mat-tab>
-  
+            <hr>
+            <div class="col-12 m-1">
+              <form [formGroup]="createForm">
+                <fieldset>
+                  <mat-form-field class="col-12 small-font-size">
+                    <input name="name" formControlName="name" matInput placeholder="Name">
+                  </mat-form-field>
+                  <mat-form-field class="col-12 small-font-size">
+                    <input name="weigth" formControlName="weigth" matInput placeholder="Weigth">
+                  </mat-form-field>
+                  <mat-form-field class="col-12 small-font-size">
+                    <input name="price" formControlName="price" matInput placeholder="Price">
+                  </mat-form-field>
+                </fieldset>
+              </form>
+              <button class="m-1" [disabled]="!createForm.valid" mat-raised-button color="primary"
+                (click)="createNewFood()">Create new</button>
+            </div>
+          </div>
 
-    <mat-tab disabled="true" label="Third">
-      <div class="d-flex justify-content-start">
-      <div class="border border-dark m-2 p-2 col-xl-4 col-lg-4 col-md-4" style="text-align: left;">
-        <div class="example-container">
-          <h2>All food</h2>
-          <div
-            cdkDropList
-            #todoList="cdkDropList"
-            [cdkDropListData]="this.allFoodMinusSelected"
-            [cdkDropListConnectedTo]="[doneList]"
-            class="example-list"
-            (cdkDropListDropped)="drop($event)">
-            <div class="example-box" *ngFor="let item of this.allFoodMinusSelected" cdkDrag>{{item.name}}</div>
+          <div class="align-self-start border border-dark m-2 p-2 col-xl-6 col-lg-6 col-md-6">
+            <mat-form-field>
+              <input matInput (keyup)="applyFilter($event.target.value)" placeholder="Filter">
+            </mat-form-field>
+            <mat-table #table [dataSource]="dataSource" matSort>
+              <!-- Name Column -->
+              <ng-container matColumnDef="name">
+                <mat-header-cell *matHeaderCellDef mat-sort-header> Name </mat-header-cell>
+                <mat-cell *matCellDef="let element"> {{element.name}} </mat-cell>
+              </ng-container>
+
+              <!-- Weigth Column -->
+              <ng-container matColumnDef="weigth">
+                <mat-header-cell *matHeaderCellDef mat-sort-header> Weigth </mat-header-cell>
+                <mat-cell *matCellDef="let element"> {{element.weigth}} </mat-cell>
+              </ng-container>
+
+              <!-- Price Column -->
+              <ng-container matColumnDef="price">
+                <mat-header-cell *matHeaderCellDef mat-sort-header> Price </mat-header-cell>
+                <mat-cell *matCellDef="let element"> {{element.price}} </mat-cell>
+              </ng-container>
+
+              <!-- Price Active -->
+              <ng-container matColumnDef="visible">
+                <mat-header-cell *matHeaderCellDef mat-sort-header> Visible </mat-header-cell>
+                <mat-cell *matCellDef="let element">
+                  <img style="width:1.5rem" *ngIf="element.visible === false"
+                    src="../../assets/media/sharp_clear_black_36dp.png">
+                  <img style="width:1.5rem" *ngIf="element.visible === true"
+                    src="../../assets/media/sharp_done_black_36dp.png">
+                </mat-cell>
+                <!-- <mat-checkbox [checked]="element.visible" (change)="updateActiveFood($event)">Check me!</mat-checkbox> -->
+              </ng-container>
+
+
+              <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+              <mat-row *matRowDef="let row; columns: displayedColumns;" style="cursor: pointer;"
+                (click)="getRecord(row)"></mat-row>
+            </mat-table>
+            <mat-paginator #paginator [pageSize]="7" [pageSizeOptions]="[5, 7, 10]" [showFirstLastButtons]="true"
+              [pageIndex]="0">
+            </mat-paginator>
           </div>
         </div>
-        
-        <div class="example-container">
-          <h2>{{this.day}}</h2>
-        
-          <div
-            cdkDropList
-            #doneList="cdkDropList"
-            [cdkDropListData]="this.menuForTheDay"
-            [cdkDropListConnectedTo]="[todoList]"
-            class="example-list"
-            (cdkDropListDropped)="drop($event)">
-            <div class="example-box" *ngFor="let item of this.menuForTheDay" cdkDrag>{{item.name}}</div>
+      </mat-tab>
+
+
+      <mat-tab label="Working days">
+        <div class="d-flex justify-content-start">
+          <div class="align-self-start border border-dark m-2 p-2 col-xl-3 col-lg-3 col-md-4">
+            <mat-form-field>
+              <input matInput (keyup)="applyFilter2($event.target.value)" placeholder="Filter">
+            </mat-form-field>
+            <mat-table #table [dataSource]="workingDayDataSource" matSort>
+              <!-- Day Column -->
+              <ng-container matColumnDef="day">
+                <mat-header-cell *matHeaderCellDef mat-sort-header> Day </mat-header-cell>
+                <mat-cell *matCellDef="let element"> {{element.day}} </mat-cell>
+              </ng-container>
+
+              <!-- Active Column -->
+              <ng-container matColumnDef="visible">
+                <mat-header-cell *matHeaderCellDef mat-sort-header> Active </mat-header-cell>
+                <mat-cell *matCellDef="let element">
+                  <img style="width:1.5rem" *ngIf="element.visible === false"
+                    src="../../assets/media/sharp_clear_black_36dp.png">
+                  <img style="width:1.5rem" *ngIf="element.visible === true"
+                    src="../../assets/media/sharp_done_black_36dp.png">
+                </mat-cell>
+              </ng-container>
+
+              <mat-header-row *matHeaderRowDef="displayedWorkingDaysColumns"></mat-header-row>
+              <mat-row *matRowDef="let row; columns: displayedWorkingDaysColumns;" (click)="getDay(row)"
+                style="cursor: pointer;"></mat-row>
+            </mat-table>
+            <mat-paginator #paginator2 [pageSize]="7" [pageSizeOptions]="[5, 7, 10]" [showFirstLastButtons]="true"
+              [pageIndex]="0">
+            </mat-paginator>
+          </div>
+
+          <div class="align-self-start border border-dark m-2 p-2 col-xl-3 col-lg-3 col-md-4">
+            <mat-form-field>
+              <input [min]="minDate" [max]="maxDate" matInput [matDatepickerFilter]="dayFilter" disabled="true"
+                [matDatepicker]="picker" placeholder="Choose a date"
+                (dateInput)="calendarSelectionChange('input', $event)">
+              <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+              <mat-datepicker disabled="false" #picker></mat-datepicker>
+            </mat-form-field>
+            <br>
+            <button mat-stroked-button color="primary" [disabled]="createNewWorkingDayDisabled"
+              (click)="createNewWorkingDay()">Create new wd</button>
           </div>
         </div>
-        <div>
-            <mat-checkbox [checked]="checkedActiveDay" (change)="updateActiveDay($event)">Active</mat-checkbox>
+      </mat-tab>
+
+
+      <mat-tab disabled="true" label="Create meniu">
+        <div class="d-flex justify-content-start">
+          <div class="border border-dark m-2 p-2 col-xl-4 col-lg-4 col-md-4" style="text-align: left;">
+            <div class="example-container">
+              <h2>All food</h2>
+              <div cdkDropList #todoList="cdkDropList" [cdkDropListData]="this.allFoodMinusSelected"
+                [cdkDropListConnectedTo]="[doneList]" class="example-list" (cdkDropListDropped)="drop($event)">
+                <div class="example-box" *ngFor="let item of this.allFoodMinusSelected" cdkDrag>{{item.name}}</div>
+              </div>
+            </div>
+
+            <div class="example-container">
+              <h2>{{this.day}}</h2>
+
+              <div cdkDropList #doneList="cdkDropList" [cdkDropListData]="this.menuForTheDay"
+                [cdkDropListConnectedTo]="[todoList]" class="example-list" (cdkDropListDropped)="drop($event)">
+                <div class="example-box" *ngFor="let item of this.menuForTheDay" cdkDrag>{{item.name}}</div>
+              </div>
+            </div>
+            <div>
+              <mat-checkbox [checked]="checkedActiveDay" (change)="updateActiveDay($event)">Active</mat-checkbox>
+            </div>
+            <div>
+              <button mat-stroked-button color="primary" [disabled]="false" (click)="onSaveNewMenuState()">Update
+                menu</button>
+            </div>
+          </div>
         </div>
-        <div>
-          <button mat-stroked-button color="primary" [disabled]="false" (click)="onSaveNewMenuState()">Update menu</button>
-        </div>
-      </div>
-      </div>
-    </mat-tab>
-  </mat-tab-group>
-</div>
+      </mat-tab>
+    </mat-tab-group>
+  </div>

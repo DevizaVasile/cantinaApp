@@ -15,15 +15,15 @@ import { StaffService } from '../services/staff.service'
 })
 export class StaffClosingComponent implements OnInit {
 
-  searchUserForm:FormGroup;
-  now:string;
-  selectedTabIndex:number;
-  viewOrder:Array<any>;
+  searchUserForm: FormGroup;
+  now: string;
+  selectedTabIndex: number;
+  viewOrder: Array<any>;
   orderStatusClosed: boolean;
 
-  constructor(private userService: UserService, private fb:FormBuilder, private router:Router,public snackBar: MatSnackBar, private staffService: StaffService) {
-  
-    this.selectedTabIndex=0;
+  constructor(private userService: UserService, private fb: FormBuilder, private router: Router, public snackBar: MatSnackBar, private staffService: StaffService) {
+
+    this.selectedTabIndex = 0;
 
     this.searchUserForm = this.fb.group({
       userEmail: ['', [Validators.required, Validators.pattern('^[a-z0-9._%+-]+@[a-z0-9.-]+\\.[a-z]{2,4}$')]],
@@ -31,59 +31,66 @@ export class StaffClosingComponent implements OnInit {
 
     setInterval(() => {
       let date = new Date();
-      this.now = date.getDate()+"-"+(date.getMonth()+1)+"-"+date.getFullYear() +"    "+date.getHours()+":"+date.getMinutes()
+      this.now = date.getDate() + "-" + (date.getMonth() + 1) + "-" + date.getFullYear() + "    " + date.getHours() + ":" + date.getMinutes()
     }, 60);
-   }
+  }
 
   ngOnInit() {
     this.orderStatusClosed = true;
     // this.isOrderClosed()
   }
 
-  onSearch(){
-    let a=this._getNowAsString()
-    let b=this.searchUserForm.getRawValue().userEmail
-    this.userService.getOrderForDay(this._getNowAsString(), this.searchUserForm.getRawValue().userEmail).subscribe( (res:Array<any>) =>{
-      if(res.length>0){
-        this.selectedTabIndex=1;
-        this.viewOrder=res;
+  onSearch() {
+    this.userService.getOrderForDay(this._getNowAsString(), this.searchUserForm.getRawValue().userEmail).subscribe((res: Array<any>) => {
+      if (res.length > 0) {
+        this.selectedTabIndex = 1;
+        this.viewOrder = res;
+        this.isOrderClosed();
       }
-      else{
+      else {
         //user not found
-        this.snackBar.open("User not found","x",{duration:2000})
+        this.snackBar.open("User not found", "x", { duration: 2000 })
       }
 
       (err) => {
-        this.snackBar.open("User not found","x",{duration:2000})
+        this.snackBar.open("User not found", "x", { duration: 2000 })
       }
-      
+
     });
   }
 
-  onCloseOrder(){
-    this.staffService.closeOrder({userEmail: this.searchUserForm.getRawValue().userEmail, day:this._getNowAsString()}).subscribe( (res:any) =>{
-      this.snackBar.open("Order closed","x",{duration:2000})
+  onCloseOrder() {
+    this.staffService.closeOrder({ userEmail: this.searchUserForm.getRawValue().userEmail, day: this._getNowAsString() }).subscribe((res: any) => {
+      this.snackBar.open("Order closed", "x", { duration: 2000 })
       this.isOrderClosed()
     })
   }
 
-  isOrderClosed(){
-    this.staffService.isOrderClosed({userEmail: this.searchUserForm.getRawValue().userEmail, day:this._getNowAsString()}).subscribe( (res:any) =>{
+  isOrderClosed() {
+    this.staffService.isOrderClosed({ userEmail: this.searchUserForm.getRawValue().userEmail, day: this._getNowAsString() }).subscribe((res: any) => {
       this.orderStatusClosed = res;
     })
   }
 
-  _getNowAsString(){
+  _getNowAsString() {
     let now = new Date();
-    let month = now.getMonth()+1;
+    let month = now.getMonth() + 1;
     let monthStr;
-    if(month<10){
-      monthStr="0"+month.toString()
+    let date = now.getDate();
+    let dateStr;
+    if (month < 10) {
+      monthStr = "0" + month.toString()
     }
-    else{
-      monthStr=month.toString()
+    else {
+      monthStr = month.toString()
     }
-    return now.getFullYear()+"-"+monthStr+"-"+now.getDate()
+    if (date < 10) {
+      dateStr = "0" + date;
+    }
+    else {
+      dateStr = date.toString();
+    }
+    return now.getFullYear() + "-" + monthStr + "-" + dateStr;
   }
 
 }
