@@ -104,7 +104,6 @@ export class StaffService {
   }
 
   closeOrder(payload: Object) {
-    debugger
     return this.http.post("http://localhost:5000/api/invoice/closeOrder", payload).pipe(
       tap(res => { }),
       catchError(err => {
@@ -114,7 +113,6 @@ export class StaffService {
   }
 
   isOrderClosed(payload: Object) {
-    debugger
     return this.http.post("http://localhost:5000/api/invoice/isOrderClosed", payload).pipe(
       tap(res => { }),
       catchError(err => {

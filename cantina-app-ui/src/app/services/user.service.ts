@@ -57,7 +57,6 @@ export class UserService {
   }
 
   getOrderForDay(day: String, userId: String) {
-    debugger
     return this.http.get("http://localhost:5000/api/invoice/getInvoiceFoodForDay/" + day + "/" + userId, {}).pipe(
       tap(res => { }),
       catchError(err => {
